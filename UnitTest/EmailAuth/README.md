@@ -1,7 +1,7 @@
 # EmailAuth
 이메일 인증 단위 테스트 프로젝트
 
-## 작동방식
+## 동작
 <img src="https://user-images.githubusercontent.com/47443884/149079340-32406b23-b49b-4950-b940-9c5b9ff71709.gif" width="200px">
 
 ## Custom
