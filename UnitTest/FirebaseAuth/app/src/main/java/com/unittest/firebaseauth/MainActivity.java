@@ -25,6 +25,7 @@ public class MainActivity extends AppCompatActivity {
 
         setOnClick();
         mAuth = FirebaseAuth.getInstance();
+        FirebaseAuth.getInstance().signOut();
     }
 
     private void setOnClick(){

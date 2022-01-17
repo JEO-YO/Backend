@@ -1,5 +1,7 @@
 package com.unittest.firebaseauth;
 
+import static android.view.View.GONE;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;

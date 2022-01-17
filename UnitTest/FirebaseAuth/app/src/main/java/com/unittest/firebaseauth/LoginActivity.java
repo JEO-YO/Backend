@@ -1,6 +1,7 @@
 package com.unittest.firebaseauth;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -20,7 +21,7 @@ import com.google.firebase.auth.FirebaseUser;
 
 public class LoginActivity extends AppCompatActivity {
 
-    private Button exceed_btn;
+    private Button exceed_btn, changePwd_btn;
     private EditText email, password;
 
     private FirebaseAuth mAuth;
@@ -38,6 +39,18 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 login();
+            }
+        });
+
+        changePwd_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(mAuth.getCurrentUser() != null)
+                    startActivity(new Intent(LoginActivity.this, ChangePwdActivity.class));
+                else{
+                    Toast.makeText(LoginActivity.this, "Login is necessary for changing password",
+                            Toast.LENGTH_SHORT).show();
+                }
             }
         });
     }
@@ -63,8 +76,11 @@ public class LoginActivity extends AppCompatActivity {
                 });
     }
 
+
+
     private void setId(){
         exceed_btn = findViewById(R.id.exceed_btn);
+        changePwd_btn = findViewById(R.id.changePwd_btn);
 
         email = findViewById(R.id.login_email);
         password = findViewById(R.id.login_password);
