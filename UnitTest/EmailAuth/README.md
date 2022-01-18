@@ -13,8 +13,8 @@
  <string name="app_name">EmailAuth</string>  
  
  //보낼 때 사용할 이메일 계정 정보
- <string name="email">jeoyo121212@gmail.com</string>  
- <string name="emailPwd">!jeoyo159</string>  
+ <string name="email">email</string>  
+ <string name="emailPwd">password</string>  
  
  //인증 코드와 함께 보낼 문구
  //줄 바꿈 으로 문구 끝
