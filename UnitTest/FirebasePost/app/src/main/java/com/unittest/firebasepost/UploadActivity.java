@@ -113,7 +113,7 @@ public class UploadActivity extends AppCompatActivity {
     private void uploadThumbnail(String key){
         FirebaseStorage storage = FirebaseStorage.getInstance();
         StorageReference storageRef = storage.getReference();
-        StorageReference postImageRef = storageRef.child("post/" + key);
+        StorageReference postImageRef = storageRef.child("posts/" + key);
 
         // Get the data from an ImageView as bytes
         imageView_thumbnail.setDrawingCacheEnabled(true);
