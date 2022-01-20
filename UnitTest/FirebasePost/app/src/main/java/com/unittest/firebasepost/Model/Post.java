@@ -13,15 +13,11 @@ public class Post {
     private String description;
     private String thumbnail = "";
 
-    public String getKey() {
-        return key;
+
+    public Post() {
     }
 
-    public void setKey(String key) {
-        this.key = key;
-    }
-
-    public Post(String key, String classify, String category, String period, String frequency, String memberCnt, String memberCondition, String title, String description) {
+    public Post(String key, String classify, String category, String period, String frequency, String memberCnt, String memberCondition, String title, String description, String thumbnail) {
         this.key = key;
         this.classify = classify;
         this.category = category;
@@ -31,7 +27,17 @@ public class Post {
         this.memberCondition = memberCondition;
         this.title = title;
         this.description = description;
+        this.thumbnail = thumbnail;
     }
+
+    public String getKey() {
+        return key;
+    }
+
+    public void setKey(String key) {
+        this.key = key;
+    }
+
 
     public String getClassify() {
         return classify;
