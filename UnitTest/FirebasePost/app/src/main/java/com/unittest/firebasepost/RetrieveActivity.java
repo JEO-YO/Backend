@@ -105,7 +105,7 @@ public class RetrieveActivity extends AppCompatActivity {
     }
 
     private void setTextView(){
-        Post post = posts.get(0);
+        Post post = posts.get(posts.size()-1);
 
         textView_key.setText(post.getKey());
         textView_classify.setText(post.getClassify());
