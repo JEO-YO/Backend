@@ -11,19 +11,25 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.unittest.recentsearch.adapter.SearchAdapter;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 public class SearchActivity extends AppCompatActivity {
 
     private EditText editText_search;
     private Button search_btn;
-
-//    private ArrayList<String> searches;
+    private RecyclerView recyclerView_history;
+    private String recent;
+    //    private ArrayList<String> searches;
 
     private FirebaseAuth mAuth;
     @Override
@@ -33,16 +39,25 @@ public class SearchActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         search_btn = findViewById(R.id.search);
         editText_search = findViewById(R.id.editTextSearch);
+        recyclerView_history = findViewById(R.id.recyclerView_history);
+
+        recyclerView_history.setLayoutManager(new LinearLayoutManager(this));
+
+        getHistory();
 
         search_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                upload(recent);
                 getHistory();
             }
         });
 
 
     }
+
+
+
 
     private void getHistory(){
         DatabaseReference ref1 = FirebaseDatabase.getInstance().getReference().child("Searches").child(mAuth.getCurrentUser().getUid());
@@ -54,14 +69,18 @@ public class SearchActivity extends AppCompatActivity {
                     Log.e("firebase", "Error getting data", task.getException());
                 }
                 else {
-                    String recent = String.valueOf(task.getResult().getValue());
-                    if (recent == "null")
-                        upload("");
-                    else{
-                        upload(recent);
+                    recent = String.valueOf(task.getResult().getValue());
+                    if (!recent.isEmpty() && recent != "null" && recent != null){
                         String[] histories = recent.split(",");
-                        Log.d("firebase", histories[0]);
+//                        Log.d("firebase", histories[0]);
+
+                        SearchAdapter searchAdapter = new SearchAdapter(histories);
+                        recyclerView_history.setAdapter(searchAdapter);
                     }
+//                    else{
+//                        upload(recent);
+//
+//                    }
 
                 }
             }
@@ -71,13 +90,13 @@ public class SearchActivity extends AppCompatActivity {
     private void upload(String recent){
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
         String title = editText_search.getText().toString();
-        String data = recent + title + ",";
-//        searches.add(title);
-//        Log.d("Search Data", searches.get(0));
+        if(!title.isEmpty()){
+            String data = recent + title + ",";
+            reference.child("Searches").child(mAuth.getCurrentUser().getUid()).setValue(data);// upload to db
+            Toast.makeText(SearchActivity.this, "업로드 완료", Toast.LENGTH_SHORT).show();
+        }
 
-        reference.child("Searches").child(mAuth.getCurrentUser().getUid()).setValue(data);// upload to db
 
-        Toast.makeText(SearchActivity.this, "업로드 완료", Toast.LENGTH_SHORT).show();
     }
 
 
