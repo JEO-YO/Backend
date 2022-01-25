@@ -7,6 +7,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.google.android.gms.common.util.ArrayUtils;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -56,9 +57,6 @@ public class SearchActivity extends AppCompatActivity {
 
     }
 
-
-
-
     private void getHistory(){
         DatabaseReference ref1 = FirebaseDatabase.getInstance().getReference().child("Searches").child(mAuth.getCurrentUser().getUid());
 
@@ -74,17 +72,39 @@ public class SearchActivity extends AppCompatActivity {
                         String[] histories = recent.split(",");
 //                        Log.d("firebase", histories[0]);
 
-                        SearchAdapter searchAdapter = new SearchAdapter(histories);
+                        SearchAdapter searchAdapter = new SearchAdapter(histories, new ClickListener() {
+                            @Override
+                            public void onDeleteClicked(int position) {
+                                for (int i = position; i < histories.length - 1; i++) {
+                                    histories[i] = histories[i + 1];
+                                }
+                                recent = convertStringArr2String(histories);
+                                deleteData(recent);
+                                getHistory();
+                            }
+                        });
                         recyclerView_history.setAdapter(searchAdapter);
                     }
-//                    else{
-//                        upload(recent);
-//
-//                    }
 
                 }
             }
         });
+    }
+
+    private void deleteData(String recent){
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
+        reference.child("Searches").child(mAuth.getCurrentUser().getUid()).setValue(recent);// upload to db
+        Toast.makeText(SearchActivity.this, "삭제 완료", Toast.LENGTH_SHORT).show();
+    }
+
+    private String convertStringArr2String(String[] stringArray){
+        StringBuffer sb = new StringBuffer();
+        for(int i = 0; i < stringArray.length; i++) {
+            sb.append(stringArray[i] + ",");
+        }
+        String str = sb.toString();
+
+        return str;
     }
 
     private void upload(String recent){
