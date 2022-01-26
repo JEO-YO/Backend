@@ -15,8 +15,15 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.GenericTypeIndicator;
 import com.google.firebase.database.ValueEventListener;
 import com.unittest.recentsearch.adapter.SearchAdapter;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.List;
+import java.util.ListIterator;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -24,15 +31,19 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-public class SearchActivity extends AppCompatActivity {
+public class SearchActivity extends AppCompatActivity implements ClickListener {
 
     private EditText editText_search;
     private Button search_btn;
     private RecyclerView recyclerView_history;
-    private String recent;
-    //    private ArrayList<String> searches;
+
+    DatabaseReference ref;
+    private ArrayList<String> searches = new ArrayList<String>();
+    SearchAdapter searchAdapter;
+//    ArrayList<String> exampleArray;
 
     private FirebaseAuth mAuth;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,84 +51,84 @@ public class SearchActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         search_btn = findViewById(R.id.search);
         editText_search = findViewById(R.id.editTextSearch);
-        recyclerView_history = findViewById(R.id.recyclerView_history);
 
+        recyclerView_history = findViewById(R.id.recyclerView_history);
         recyclerView_history.setLayoutManager(new LinearLayoutManager(this));
+
+        ref = FirebaseDatabase.getInstance().getReference().child("Searches").child(mAuth.getCurrentUser().getUid());
 
         getHistory();
 
         search_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                upload(recent);
                 getHistory();
+
+                upload();
+                editText_search.setText("");
+
             }
         });
 
 
     }
 
-    private void getHistory(){
-        DatabaseReference ref1 = FirebaseDatabase.getInstance().getReference().child("Searches").child(mAuth.getCurrentUser().getUid());
+    @Override
+    public void onDeleteClicked(View v, int position) {
+        searches.remove(position);
+        deleteData(searches);
+    }
 
-        ref1.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+    private void getHistory() {
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("Searches").child(mAuth.getCurrentUser().getUid());
+        ArrayList<String> recent = new ArrayList<String>();
+
+        ref.addValueEventListener(new ValueEventListener() {
             @Override
-            public void onComplete(@NonNull Task<DataSnapshot> task) {
-                if (!task.isSuccessful()) {
-                    Log.e("firebase", "Error getting data", task.getException());
-                }
-                else {
-                    recent = String.valueOf(task.getResult().getValue());
-                    if (!recent.isEmpty() && recent != "null" && recent != null){
-                        String[] histories = recent.split(",");
-//                        Log.d("firebase", histories[0]);
+            public void onDataChange(DataSnapshot snapshot) {
+                GenericTypeIndicator<ArrayList<String>> t = new GenericTypeIndicator<ArrayList<String>>() {
+                };
+                ArrayList<String> recent = snapshot.getValue(t);
 
-                        SearchAdapter searchAdapter = new SearchAdapter(histories, new ClickListener() {
-                            @Override
-                            public void onDeleteClicked(int position) {
-                                for (int i = position; i < histories.length - 1; i++) {
-                                    histories[i] = histories[i + 1];
-                                }
-                                recent = convertStringArr2String(histories);
-                                deleteData(recent);
-                                getHistory();
-                            }
-                        });
-                        recyclerView_history.setAdapter(searchAdapter);
-                    }
-
+                if (recent == null) {
+                    System.out.println("No messages");
+                    searches.clear();
+                } else {
+                    searches = recent;
+                    System.out.println("The first message is: " + searches.get(0));
                 }
+                setAdapter();
             }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                // Do something for this
+
+            }
+
         });
     }
 
-    private void deleteData(String recent){
-        DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
-        reference.child("Searches").child(mAuth.getCurrentUser().getUid()).setValue(recent);// upload to db
-        Toast.makeText(SearchActivity.this, "삭제 완료", Toast.LENGTH_SHORT).show();
-    }
-
-    private String convertStringArr2String(String[] stringArray){
-        StringBuffer sb = new StringBuffer();
-        for(int i = 0; i < stringArray.length; i++) {
-            sb.append(stringArray[i] + ",");
-        }
-        String str = sb.toString();
-
-        return str;
-    }
-
-    private void upload(String recent){
-        DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
+    private void upload() {
         String title = editText_search.getText().toString();
-        if(!title.isEmpty()){
-            String data = recent + title + ",";
-            reference.child("Searches").child(mAuth.getCurrentUser().getUid()).setValue(data);// upload to db
+        if (!title.isEmpty() && title != null) {
+            searches.add(title);
+            ref.setValue(searches);// upload to db
             Toast.makeText(SearchActivity.this, "업로드 완료", Toast.LENGTH_SHORT).show();
         }
-
-
     }
+
+    private void setAdapter() {
+        searchAdapter = new SearchAdapter(searches, this);
+        recyclerView_history.setAdapter(searchAdapter);
+    }
+
+    private void deleteData(ArrayList<String> recent) {
+
+        ref.setValue(recent);// upload to db
+        Toast.makeText(SearchActivity.this, String.valueOf(recent.size()), Toast.LENGTH_SHORT).show();
+    }
+
 
 
 }
