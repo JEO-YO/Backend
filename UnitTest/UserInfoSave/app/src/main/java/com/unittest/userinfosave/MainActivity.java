@@ -10,11 +10,6 @@ import android.widget.EditText;
 
 public class MainActivity extends AppCompatActivity {
 
-
-    public static final String SEND_NAME = "name";
-    public static final String SEND_UNIVERSITY = "university";
-    public static final String SEND_DEPARTMENT = "department";
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,8 +35,8 @@ public class MainActivity extends AppCompatActivity {
         EditText university = (EditText) findViewById(R.id.editText_university);
         EditText department = (EditText) findViewById(R.id.editText_department);
 
-        intent.putExtra(SEND_NAME, name.getText().toString());
-        intent.putExtra(SEND_UNIVERSITY, university.getText().toString());
-        intent.putExtra(SEND_DEPARTMENT, department.getText().toString());
+        intent.putExtra(String.valueOf(SendData.NAME), name.getText().toString());
+        intent.putExtra(String.valueOf(SendData.UNIVERSITY), university.getText().toString());
+        intent.putExtra(String.valueOf(SendData.DEPARTMENT), department.getText().toString());
     }
 }
