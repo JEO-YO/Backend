@@ -1,6 +1,7 @@
 package com.unittest.recentsearch;
 
 import android.os.Bundle;
+import android.os.Environment;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -19,6 +20,12 @@ import com.google.firebase.database.GenericTypeIndicator;
 import com.google.firebase.database.ValueEventListener;
 import com.unittest.recentsearch.adapter.SearchAdapter;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
@@ -31,6 +38,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import static java.lang.System.out;
+
 public class SearchActivity extends AppCompatActivity implements ClickListener {
 
     private EditText editText_search;
@@ -38,7 +47,6 @@ public class SearchActivity extends AppCompatActivity implements ClickListener {
     private RecyclerView recyclerView_history;
 
     DatabaseReference ref;
-    private ArrayList<String> searches = new ArrayList<String>();
     SearchAdapter searchAdapter;
 //    ArrayList<String> exampleArray;
 
@@ -51,82 +59,128 @@ public class SearchActivity extends AppCompatActivity implements ClickListener {
         mAuth = FirebaseAuth.getInstance();
         search_btn = findViewById(R.id.search);
         editText_search = findViewById(R.id.editTextSearch);
+        ArrayList<String> searches = new ArrayList<String>();
 
         recyclerView_history = findViewById(R.id.recyclerView_history);
         recyclerView_history.setLayoutManager(new LinearLayoutManager(this));
 
         ref = FirebaseDatabase.getInstance().getReference().child("Searches").child(mAuth.getCurrentUser().getUid());
 
-        getHistory();
-
+//        getHistory();
+        setAdapter(readList());
         search_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                getHistory();
-
-                upload();
+//                getHistory();
+//
+//                upload();
+                ArrayList<String> searches = readList();
+                searches.add(editText_search.getText().toString());
+                saveList(searches);
                 editText_search.setText("");
+                setAdapter(searches);
 
             }
         });
 
 
+    }
+
+    private void saveList(ArrayList<String> list) {
+        try {
+            File file = this.getFilesDir();
+            File filename = new File(file, "Search_history");
+
+            if(filename.exists()) {
+                filename.delete(); // Clear available files
+            }
+            FileOutputStream fos = new FileOutputStream(filename);
+            ObjectOutputStream out = new ObjectOutputStream(fos);
+            out.writeObject(list);
+            out.close();
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+
+
+    }
+
+    private ArrayList<String> readList()
+    {
+        ArrayList<String> histories = new ArrayList<>();
+        try {
+            File file = this.getFilesDir();
+            File filename = new File(file, "Search_history");
+            FileInputStream fis = new FileInputStream(filename);
+            ObjectInputStream in = new ObjectInputStream(fis);
+            histories = (ArrayList<String>) in.readObject();
+            in.close();
+
+
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        } catch (ClassNotFoundException ex) {
+            ex.printStackTrace();
+        }
+
+        return histories;
     }
 
     @Override
-    public void onDeleteClicked(View v, int position) {
-        searches.remove(position);
-        deleteData(searches);
+    public void onDeleteClicked(View v, int position, ArrayList<String> histories) {
+        histories.remove(position);
+        deleteData(histories);
     }
 
-    private void getHistory() {
-        DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("Searches").child(mAuth.getCurrentUser().getUid());
-        ArrayList<String> recent = new ArrayList<String>();
+//    private void getHistory() {
+//        DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("Searches").child(mAuth.getCurrentUser().getUid());
+//        ArrayList<String> recent = new ArrayList<String>();
+//
+//        ref.addValueEventListener(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(DataSnapshot snapshot) {
+//                GenericTypeIndicator<ArrayList<String>> t = new GenericTypeIndicator<ArrayList<String>>() {
+//                };
+//                ArrayList<String> recent = snapshot.getValue(t);
+//
+//                if (recent == null) {
+//                    out.println("No messages");
+//                    searches.clear();
+//                } else {
+//                    searches = recent;
+//                    out.println("The first message is: " + searches.get(0));
+//                }
+//                setAdapter();
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError databaseError) {
+//                // Do something for this
+//
+//            }
+//
+//        });
+//    }
 
-        ref.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot snapshot) {
-                GenericTypeIndicator<ArrayList<String>> t = new GenericTypeIndicator<ArrayList<String>>() {
-                };
-                ArrayList<String> recent = snapshot.getValue(t);
+//    private void upload() {
+//        String title = editText_search.getText().toString();
+//        if (!title.isEmpty() && title != null) {
+//            searches.add(title);
+//            ref.setValue(searches);// upload to db
+//            Toast.makeText(SearchActivity.this, "업로드 완료", Toast.LENGTH_SHORT).show();
+//        }
+//    }
 
-                if (recent == null) {
-                    System.out.println("No messages");
-                    searches.clear();
-                } else {
-                    searches = recent;
-                    System.out.println("The first message is: " + searches.get(0));
-                }
-                setAdapter();
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-                // Do something for this
-
-            }
-
-        });
-    }
-
-    private void upload() {
-        String title = editText_search.getText().toString();
-        if (!title.isEmpty() && title != null) {
-            searches.add(title);
-            ref.setValue(searches);// upload to db
-            Toast.makeText(SearchActivity.this, "업로드 완료", Toast.LENGTH_SHORT).show();
-        }
-    }
-
-    private void setAdapter() {
-        searchAdapter = new SearchAdapter(searches, this);
+    private void setAdapter(ArrayList<String> histories) {
+        searchAdapter = new SearchAdapter(histories, this);
         recyclerView_history.setAdapter(searchAdapter);
     }
 
-    private void deleteData(ArrayList<String> recent) {
-
-        ref.setValue(recent);// upload to db
-        Toast.makeText(SearchActivity.this, String.valueOf(recent.size()), Toast.LENGTH_SHORT).show();
+    private void deleteData(ArrayList<String> histories) {
+//        ref.setValue(recent);// upload to db
+        saveList(histories);
+        setAdapter(readList());
+        Toast.makeText(SearchActivity.this, String.valueOf(histories.size()), Toast.LENGTH_SHORT).show();
     }
 
 

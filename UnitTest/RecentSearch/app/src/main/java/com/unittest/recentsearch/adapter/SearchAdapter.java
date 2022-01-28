@@ -19,7 +19,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder> {
 
-    private ArrayList<String> histories;
+    private static ArrayList<String> histories;
     private static ClickListener listener;
 
     // onCreateViewHolder() - 아이템 뷰를 위한 뷰홀더 객체 생성하여 리턴.
@@ -77,7 +77,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
 
         @Override
         public void onClick(View v){
-            listener.onDeleteClicked(v, this.getLayoutPosition());
+            listener.onDeleteClicked(v, this.getLayoutPosition(), SearchAdapter.histories );
 
         }
 
