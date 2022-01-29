@@ -8,7 +8,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
-import com.unittest.userinfosave.user.UserInfo;
+import com.unittest.userinfosave.user.model.UserInfo;
 
 public class MainActivity extends AppCompatActivity {
 

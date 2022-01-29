@@ -4,29 +4,59 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
-import com.unittest.userinfosave.user.UserInfo;
+import com.unittest.userinfosave.user.AppConfig;
+import com.unittest.userinfosave.user.model.User;
+import com.unittest.userinfosave.user.model.UserInfo;
+
 import java.util.HashMap;
 
 public class UserInfoActivity extends AppCompatActivity {
 
     private final HashMap<UserInfo, String> userInfo = new HashMap<>();
+    private final AppConfig appConfig = new AppConfig();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_info);
 
-        Intent intent = getIntent();
-        getSendData(intent);
-        appendTextView();
+        getSendData();
+        clickJoin();
     }
 
-    private void getSendData(Intent intent) {
+    private void clickJoin() {
+        Button btnJoin = (Button) findViewById(R.id.btn_join);
+        btnJoin.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
+                putUserInfo();
+                User user = new User(1L, userInfo);
+                appConfig.userService().join(user);
+                Toast.makeText(UserInfoActivity.this, "업로드 완료", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void putUserInfo() {
+        EditText activityArea = (EditText) findViewById(R.id.editText_activityArea);
+        EditText interesting = (EditText) findViewById(R.id.editText_interesting);
+
+        userInfo.put(UserInfo.ACTIVITY_AREA, activityArea.getText().toString());
+        userInfo.put(UserInfo.INTERESTING, interesting.getText().toString());
+    }
+
+    private void getSendData() {
+        Intent intent = getIntent();
+
         userInfo.put(UserInfo.NAME, intent.getStringExtra(String.valueOf(UserInfo.NAME)));
         userInfo.put(UserInfo.UNIVERSITY, intent.getStringExtra(String.valueOf(UserInfo.UNIVERSITY)));
         userInfo.put(UserInfo.DEPARTMENT, intent.getStringExtra(String.valueOf(UserInfo.DEPARTMENT)));
+        appendTextView();
     }
 
     private void appendTextView() {
