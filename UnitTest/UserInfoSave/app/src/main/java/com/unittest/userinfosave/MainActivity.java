@@ -8,6 +8,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.unittest.userinfosave.user.UserInfo;
+
 public class MainActivity extends AppCompatActivity {
 
     @Override
@@ -35,8 +37,8 @@ public class MainActivity extends AppCompatActivity {
         EditText university = (EditText) findViewById(R.id.editText_university);
         EditText department = (EditText) findViewById(R.id.editText_department);
 
-        intent.putExtra(String.valueOf(SendData.NAME), name.getText().toString());
-        intent.putExtra(String.valueOf(SendData.UNIVERSITY), university.getText().toString());
-        intent.putExtra(String.valueOf(SendData.DEPARTMENT), department.getText().toString());
+        intent.putExtra(String.valueOf(UserInfo.NAME), name.getText().toString());
+        intent.putExtra(String.valueOf(UserInfo.UNIVERSITY), university.getText().toString());
+        intent.putExtra(String.valueOf(UserInfo.DEPARTMENT), department.getText().toString());
     }
 }

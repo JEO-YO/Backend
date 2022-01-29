@@ -6,11 +6,12 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.widget.TextView;
 
+import com.unittest.userinfosave.user.UserInfo;
 import java.util.HashMap;
 
 public class UserInfoActivity extends AppCompatActivity {
 
-    private final HashMap<SendData, String> userInfo = new HashMap<>();
+    private final HashMap<UserInfo, String> userInfo = new HashMap<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,9 +24,9 @@ public class UserInfoActivity extends AppCompatActivity {
     }
 
     private void getSendData(Intent intent) {
-        userInfo.put(SendData.NAME, intent.getStringExtra(String.valueOf(SendData.NAME)));
-        userInfo.put(SendData.UNIVERSITY, intent.getStringExtra(String.valueOf(SendData.UNIVERSITY)));
-        userInfo.put(SendData.DEPARTMENT, intent.getStringExtra(String.valueOf(SendData.DEPARTMENT)));
+        userInfo.put(UserInfo.NAME, intent.getStringExtra(String.valueOf(UserInfo.NAME)));
+        userInfo.put(UserInfo.UNIVERSITY, intent.getStringExtra(String.valueOf(UserInfo.UNIVERSITY)));
+        userInfo.put(UserInfo.DEPARTMENT, intent.getStringExtra(String.valueOf(UserInfo.DEPARTMENT)));
     }
 
     private void appendTextView() {
@@ -33,8 +34,8 @@ public class UserInfoActivity extends AppCompatActivity {
         TextView textViewUniversity = findViewById(R.id.textView_university);
         TextView textViewDepartment = findViewById(R.id.textView_department);
 
-        textViewName.append(userInfo.get(SendData.NAME));
-        textViewUniversity.append(userInfo.get(SendData.UNIVERSITY));
-        textViewDepartment.append(userInfo.get(SendData.DEPARTMENT));
+        textViewName.append(userInfo.get(UserInfo.NAME));
+        textViewUniversity.append(userInfo.get(UserInfo.UNIVERSITY));
+        textViewDepartment.append(userInfo.get(UserInfo.DEPARTMENT));
     }
 }
