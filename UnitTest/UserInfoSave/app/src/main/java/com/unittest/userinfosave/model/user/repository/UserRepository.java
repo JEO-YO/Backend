@@ -1,6 +1,6 @@
-package com.unittest.userinfosave.user.repository;
+package com.unittest.userinfosave.model.user.repository;
 
-import com.unittest.userinfosave.user.model.User;
+import com.unittest.userinfosave.model.user.User;
 
 public interface UserRepository {
 

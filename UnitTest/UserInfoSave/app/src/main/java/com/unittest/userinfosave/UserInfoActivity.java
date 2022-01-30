@@ -10,9 +10,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.unittest.userinfosave.user.AppConfig;
-import com.unittest.userinfosave.user.model.User;
-import com.unittest.userinfosave.user.model.UserInfo;
+import com.unittest.userinfosave.model.user.User;
+import com.unittest.userinfosave.model.user.UserInfo;
 
 import java.util.HashMap;
 

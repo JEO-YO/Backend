@@ -1,4 +1,4 @@
-package com.unittest.userinfosave.user.model;
+package com.unittest.userinfosave.model.user;
 
 import java.util.Map;
 

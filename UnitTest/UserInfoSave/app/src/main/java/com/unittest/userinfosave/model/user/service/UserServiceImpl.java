@@ -1,7 +1,7 @@
-package com.unittest.userinfosave.user.service;
+package com.unittest.userinfosave.model.user.service;
 
-import com.unittest.userinfosave.user.model.User;
-import com.unittest.userinfosave.user.repository.UserRepository;
+import com.unittest.userinfosave.model.user.User;
+import com.unittest.userinfosave.model.user.repository.UserRepository;
 
 public class UserServiceImpl implements UserService {
 

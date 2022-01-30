@@ -8,7 +8,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
-import com.unittest.userinfosave.user.model.UserInfo;
+import com.unittest.userinfosave.model.user.UserInfo;
 
 import java.util.HashMap;
 
@@ -21,7 +21,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        // 버튼 클릭 시 페이지 이동
+
         Button buttonToUserInfo = (Button) findViewById(R.id.btn_next);
         buttonToUserInfo.setOnClickListener(new View.OnClickListener() {
             @Override

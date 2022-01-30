@@ -1,4 +1,4 @@
-package com.unittest.userinfosave.user.repository;
+package com.unittest.userinfosave.model.user.repository;
 
 import android.util.Log;
 
@@ -9,7 +9,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.unittest.userinfosave.user.model.User;
+import com.unittest.userinfosave.model.user.User;
 
 public class FirebaseUserRepository implements UserRepository {
 
