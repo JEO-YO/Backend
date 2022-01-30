@@ -18,7 +18,7 @@ import java.util.HashMap;
 
 public class UserInfoActivity extends AppCompatActivity {
 
-    private final HashMap<UserInfo, String> userInfo = new HashMap<>();
+    private HashMap<UserInfo, String> userInfo;
     private final AppConfig appConfig = new AppConfig();
 
     @Override
@@ -52,10 +52,7 @@ public class UserInfoActivity extends AppCompatActivity {
 
     private void getSendData() {
         Intent intent = getIntent();
-
-        userInfo.put(UserInfo.NAME, intent.getStringExtra(String.valueOf(UserInfo.NAME)));
-        userInfo.put(UserInfo.UNIVERSITY, intent.getStringExtra(String.valueOf(UserInfo.UNIVERSITY)));
-        userInfo.put(UserInfo.DEPARTMENT, intent.getStringExtra(String.valueOf(UserInfo.DEPARTMENT)));
+        userInfo = (HashMap<UserInfo, String>) intent.getSerializableExtra(MainActivity.USER_INFO);
         appendTextView();
     }
 

@@ -10,7 +10,12 @@ import android.widget.EditText;
 
 import com.unittest.userinfosave.user.model.UserInfo;
 
+import java.util.HashMap;
+
 public class MainActivity extends AppCompatActivity {
+
+    private final HashMap<UserInfo, String> userInfo = new HashMap<>();
+    public static final String USER_INFO = "userInfo";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,12 +38,17 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void sendData(Intent intent) {
+        putUserInfo();
+        intent.putExtra(USER_INFO, userInfo);
+    }
+
+    private void putUserInfo() {
         EditText name = (EditText) findViewById(R.id.editText_name);
         EditText university = (EditText) findViewById(R.id.editText_university);
         EditText department = (EditText) findViewById(R.id.editText_department);
 
-        intent.putExtra(String.valueOf(UserInfo.NAME), name.getText().toString());
-        intent.putExtra(String.valueOf(UserInfo.UNIVERSITY), university.getText().toString());
-        intent.putExtra(String.valueOf(UserInfo.DEPARTMENT), department.getText().toString());
+        userInfo.put(UserInfo.NAME, name.getText().toString());
+        userInfo.put(UserInfo.UNIVERSITY, university.getText().toString());
+        userInfo.put(UserInfo.DEPARTMENT, department.getText().toString());
     }
 }
