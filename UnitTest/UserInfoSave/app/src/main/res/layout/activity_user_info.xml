@@ -72,10 +72,10 @@
             android:text="가입" />
 
         <Button
-            android:id="@+id/btn_cancel"
+            android:id="@+id/btn_find"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="50dp"
-            android:text="취소" />
+            android:text="찾기" />
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

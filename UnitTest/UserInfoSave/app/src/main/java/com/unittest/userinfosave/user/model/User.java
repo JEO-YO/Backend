@@ -5,13 +5,13 @@ import java.util.Map;
 public class User {
 
     private final Long id;
-    private final String name;
-    private final String university;
-    private final String department;
-    private final String activityArea;
-    private final String interesting;
+    private final java.lang.String name;
+    private final java.lang.String university;
+    private final java.lang.String department;
+    private final java.lang.String activityArea;
+    private final java.lang.String interesting;
 
-    public User(Long id, Map<UserInfo, String> userInfo) {
+    public User(Long id, Map<UserInfo, java.lang.String> userInfo) {
         this.id = id;
         this.name = userInfo.get(UserInfo.NAME);
         this.university = userInfo.get(UserInfo.UNIVERSITY);
@@ -24,23 +24,23 @@ public class User {
         return id;
     }
 
-    public String getName() {
+    public java.lang.String getName() {
         return name;
     }
 
-    public String getUniversity() {
+    public java.lang.String getUniversity() {
         return university;
     }
 
-    public String getDepartment() {
+    public java.lang.String getDepartment() {
         return department;
     }
 
-    public String getActivityArea() {
+    public java.lang.String getActivityArea() {
         return activityArea;
     }
 
-    public String getInteresting() {
+    public java.lang.String getInteresting() {
         return interesting;
     }
 }

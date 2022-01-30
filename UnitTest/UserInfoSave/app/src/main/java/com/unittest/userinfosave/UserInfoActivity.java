@@ -18,7 +18,7 @@ import java.util.HashMap;
 
 public class UserInfoActivity extends AppCompatActivity {
 
-    private HashMap<UserInfo, String> userInfo;
+    private HashMap<UserInfo, java.lang.String> userInfo;
     private final AppConfig appConfig = new AppConfig();
 
     @Override
@@ -28,6 +28,19 @@ public class UserInfoActivity extends AppCompatActivity {
 
         getSendData();
         clickJoin();
+        String toFindArea = "Seoul";
+        clickFind(toFindArea);
+    }
+
+    private void clickFind(String toFindArea) {
+        Button btnFind = (Button) findViewById(R.id.btn_find);
+        btnFind.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                appConfig.userService().find(toFindArea);
+                Toast.makeText(UserInfoActivity.this, "찾기 완료", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     private void clickJoin() {
@@ -52,7 +65,7 @@ public class UserInfoActivity extends AppCompatActivity {
 
     private void getSendData() {
         Intent intent = getIntent();
-        userInfo = (HashMap<UserInfo, String>) intent.getSerializableExtra(MainActivity.USER_INFO);
+        userInfo = (HashMap<UserInfo, java.lang.String>) intent.getSerializableExtra(MainActivity.USER_INFO);
         appendTextView();
     }
 

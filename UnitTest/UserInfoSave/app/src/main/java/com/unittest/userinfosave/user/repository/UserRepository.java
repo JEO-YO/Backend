@@ -5,4 +5,6 @@ import com.unittest.userinfosave.user.model.User;
 public interface UserRepository {
 
     void save(User user);
+
+    void findNamesByActivityArea(String activityArea);
 }

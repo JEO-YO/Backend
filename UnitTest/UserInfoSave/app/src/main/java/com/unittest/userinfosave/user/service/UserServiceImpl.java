@@ -15,4 +15,9 @@ public class UserServiceImpl implements UserService {
     public void join(User user) {
         userRepository.save(user);
     }
+
+    @Override
+    public void find(String activityArea) {
+        userRepository.findNamesByActivityArea(activityArea);
+    }
 }
