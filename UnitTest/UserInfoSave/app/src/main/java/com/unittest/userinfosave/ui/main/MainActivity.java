@@ -1,4 +1,4 @@
-package com.unittest.userinfosave;
+package com.unittest.userinfosave.ui.main;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -8,7 +8,9 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.unittest.userinfosave.R;
 import com.unittest.userinfosave.model.user.UserInfo;
+import com.unittest.userinfosave.ui.userinfo.UserInfoActivity;
 
 import java.util.HashMap;
 

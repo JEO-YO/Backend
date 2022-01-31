@@ -1,4 +1,4 @@
-package com.unittest.userinfosave;
+package com.unittest.userinfosave.ui.userinfo;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -10,8 +10,11 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.unittest.userinfosave.AppConfig;
+import com.unittest.userinfosave.R;
 import com.unittest.userinfosave.model.user.User;
 import com.unittest.userinfosave.model.user.UserInfo;
+import com.unittest.userinfosave.ui.main.MainActivity;
 
 import java.util.HashMap;
 
@@ -26,8 +29,13 @@ public class UserInfoActivity extends AppCompatActivity {
         setContentView(R.layout.activity_user_info);
 
         getSendData();
-        clickJoin();
+        clickEvent();
+    }
+
+    private void clickEvent() {
         String toFindArea = "Seoul";
+
+        clickJoin();
         clickFind(toFindArea);
     }
 
