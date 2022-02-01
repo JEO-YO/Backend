@@ -1,46 +1,39 @@
 package com.unittest.userinfosave.model.user;
 
 import java.util.Map;
+import java.lang.String;
 
 public class User {
 
     private final Long id;
-    private final java.lang.String name;
-    private final java.lang.String university;
-    private final java.lang.String department;
-    private final java.lang.String activityArea;
-    private final java.lang.String interesting;
+    private final Map<UserInfo, String> userInfo;
 
-    public User(Long id, Map<UserInfo, java.lang.String> userInfo) {
+    public User(Long id, Map<UserInfo, String> userInfo) {
         this.id = id;
-        this.name = userInfo.get(UserInfo.NAME);
-        this.university = userInfo.get(UserInfo.UNIVERSITY);
-        this.department = userInfo.get(UserInfo.DEPARTMENT);
-        this.activityArea = userInfo.get(UserInfo.ACTIVITY_AREA);
-        this.interesting = userInfo.get(UserInfo.INTERESTING);
+        this.userInfo = userInfo;
     }
 
     public Long getId() {
         return id;
     }
 
-    public java.lang.String getName() {
-        return name;
+    public String getName() {
+        return userInfo.get(UserInfo.NAME);
     }
 
-    public java.lang.String getUniversity() {
-        return university;
+    public String getUniversity() {
+        return userInfo.get(UserInfo.UNIVERSITY);
     }
 
-    public java.lang.String getDepartment() {
-        return department;
+    public String getDepartment() {
+        return userInfo.get(UserInfo.DEPARTMENT);
     }
 
-    public java.lang.String getActivityArea() {
-        return activityArea;
+    public String getActivityArea() {
+        return userInfo.get(UserInfo.ACTIVITY_AREA);
     }
 
-    public java.lang.String getInteresting() {
-        return interesting;
+    public String getInteresting() {
+        return userInfo.get(UserInfo.INTERESTING);
     }
 }
