@@ -9,7 +9,7 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.unittest.userinfosave.R;
-import com.unittest.userinfosave.model.user.UserInfo;
+import com.unittest.userinfosave.user.UserInfo;
 import com.unittest.userinfosave.ui.userinfo.UserInfoActivity;
 
 import java.util.HashMap;

@@ -1,4 +1,4 @@
-package com.unittest.userinfosave.model.user;
+package com.unittest.userinfosave.user;
 
 public enum UserInfo {
     NAME,

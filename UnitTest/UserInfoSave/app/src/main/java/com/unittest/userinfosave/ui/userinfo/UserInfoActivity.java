@@ -12,8 +12,8 @@ import android.widget.Toast;
 
 import com.unittest.userinfosave.AppConfig;
 import com.unittest.userinfosave.R;
-import com.unittest.userinfosave.model.user.User;
-import com.unittest.userinfosave.model.user.UserInfo;
+import com.unittest.userinfosave.user.User;
+import com.unittest.userinfosave.user.UserInfo;
 import com.unittest.userinfosave.ui.main.MainActivity;
 
 import java.util.HashMap;
