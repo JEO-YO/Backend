@@ -1,4 +1,4 @@
-package com.unittest.chatservice;
+package com.unittest.chatservice.ui.signup;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -8,6 +8,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.unittest.chatservice.R;
+import com.unittest.chatservice.ui.signin.SignInActivity;
 import com.unittest.chatservice.user.repository.FirebaseUserRepository;
 import com.unittest.chatservice.user.repository.UserRepository;
 
@@ -28,7 +30,7 @@ public class SignUpActivity extends AppCompatActivity {
         cancelButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(SignUpActivity.this, MainActivity.class));
+                startActivity(new Intent(SignUpActivity.this, SignInActivity.class));
                 finish();
             }
         });
@@ -41,8 +43,8 @@ public class SignUpActivity extends AppCompatActivity {
             public void onClick(View view) {
                 final EditText email = (EditText) findViewById(R.id.signUpEmailEditText);
                 final EditText password = (EditText) findViewById(R.id.signUpPasswordEditText);
-                userRepository.auth(email.getText().toString(), password.getText().toString());
-                startActivity(new Intent(SignUpActivity.this, MainActivity.class));
+                userRepository.signUp(email.getText().toString(), password.getText().toString());
+                startActivity(new Intent(SignUpActivity.this, SignInActivity.class));
                 finish();
             }
         });

@@ -13,15 +13,33 @@ import com.google.firebase.auth.FirebaseUser;
 public class FirebaseUserRepository implements UserRepository {
 
     private static final String TAG = "MSG";
+    private final FirebaseAuth mAuth = FirebaseAuth.getInstance();
 
     @Override
-    public void auth(String email, String password) {
-        // save to firebase
-        final FirebaseAuth mAuth = FirebaseAuth.getInstance();
-        createUser(email, password, mAuth);
+    public void signUp(String email, String password) {
+        createUser(email, password);
     }
 
-    private void createUser(String email, String password, FirebaseAuth mAuth) {
+    @Override
+    public void signIn(String email, String password) {
+        mAuth.signInWithEmailAndPassword(email, password)
+                .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            // Sign in success, update UI with the signed-in user's information
+                            Log.d(TAG, "signInWithEmail:success");
+                            FirebaseUser currentUser = mAuth.getCurrentUser();
+                            System.out.println("userName = " + currentUser.getUid());
+                            return;
+                        }
+                        // If sign in fails, display a message to the user.
+                        Log.w(TAG, "signInWithEmail:failure", task.getException());
+                    }
+                });
+    }
+
+    private void createUser(String email, String password) {
         mAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                     @Override
@@ -37,5 +55,4 @@ public class FirebaseUserRepository implements UserRepository {
                     }
                 });
     }
-
 }
