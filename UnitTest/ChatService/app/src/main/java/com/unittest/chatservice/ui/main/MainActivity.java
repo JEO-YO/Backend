@@ -1,5 +1,7 @@
 package com.unittest.chatservice.ui.main;
 
+import static com.unittest.chatservice.user.repository.FirebaseUserRepository.TABLE;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -39,7 +41,11 @@ public class MainActivity extends AppCompatActivity {
         Adapter adapter = new Adapter();
         getSendData();
 
-        reference.child("Users").get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+        final FirebaseAuth mAuth = FirebaseAuth.getInstance();
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+        System.out.println("currentUser.getUid() = " + currentUser.getUid());
+
+        reference.child(TABLE).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DataSnapshot> task) {
                 if (!task.isSuccessful()) {
@@ -60,7 +66,7 @@ public class MainActivity extends AppCompatActivity {
         final List<String> userNames = new ArrayList<>();
         Iterable<DataSnapshot> children = task.getResult().getChildren();
         for (DataSnapshot data : children) {
-            String name = data.child("name").getValue().toString();
+            String name = data.child("email").getValue().toString();
             userNames.add(name);
         }
         return userNames;

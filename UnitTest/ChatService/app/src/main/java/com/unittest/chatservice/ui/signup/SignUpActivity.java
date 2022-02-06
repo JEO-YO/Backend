@@ -10,8 +10,11 @@ import android.widget.EditText;
 
 import com.unittest.chatservice.R;
 import com.unittest.chatservice.ui.signin.SignInActivity;
+import com.unittest.chatservice.user.model.User;
 import com.unittest.chatservice.user.repository.FirebaseUserRepository;
 import com.unittest.chatservice.user.repository.UserRepository;
+import com.unittest.chatservice.user.service.UserService;
+import com.unittest.chatservice.user.service.UserServiceImpl;
 
 public class SignUpActivity extends AppCompatActivity {
 
@@ -21,8 +24,7 @@ public class SignUpActivity extends AppCompatActivity {
         setContentView(R.layout.activity_sign_up);
 
         clickCancelButton();
-        UserRepository userRepository = new FirebaseUserRepository();
-        signUp(userRepository);
+        signUp();
     }
 
     private void clickCancelButton() {
@@ -36,17 +38,23 @@ public class SignUpActivity extends AppCompatActivity {
         });
     }
 
-    private void signUp(UserRepository userRepository) {
+    private void signUp() {
         Button checkButton = (Button) findViewById(R.id.checkButton);
         checkButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                final EditText email = (EditText) findViewById(R.id.signUpEmailEditText);
-                final EditText password = (EditText) findViewById(R.id.signUpPasswordEditText);
-                userRepository.signUp(email.getText().toString(), password.getText().toString());
+                joinWithInputText();
                 startActivity(new Intent(SignUpActivity.this, SignInActivity.class));
                 finish();
             }
         });
+    }
+
+    private void joinWithInputText() {
+        final EditText emailEditText = (EditText) findViewById(R.id.signUpEmailEditText);
+        final EditText passwordEditText = (EditText) findViewById(R.id.signUpPasswordEditText);
+        UserRepository userRepository = new FirebaseUserRepository();
+        UserService userService = new UserServiceImpl(userRepository);
+        userService.join(emailEditText.getText().toString(), passwordEditText.getText().toString());
     }
 }

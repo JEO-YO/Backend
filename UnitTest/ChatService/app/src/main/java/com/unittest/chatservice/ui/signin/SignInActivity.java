@@ -1,27 +1,20 @@
 package com.unittest.chatservice.ui.signin;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthResult;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.unittest.chatservice.R;
 import com.unittest.chatservice.ui.main.MainActivity;
 import com.unittest.chatservice.ui.signup.SignUpActivity;
 import com.unittest.chatservice.user.repository.FirebaseUserRepository;
 import com.unittest.chatservice.user.repository.UserRepository;
-
-import java.io.Serializable;
+import com.unittest.chatservice.user.service.UserService;
+import com.unittest.chatservice.user.service.UserServiceImpl;
 
 public class SignInActivity extends AppCompatActivity {
 
@@ -33,8 +26,7 @@ public class SignInActivity extends AppCompatActivity {
         setContentView(R.layout.activity_sign_in);
 
         moveSignUpActivity();
-        UserRepository userRepository = new FirebaseUserRepository();
-        moveMainActivity(userRepository);
+        moveMainActivity();
 
     }
 
@@ -49,33 +41,24 @@ public class SignInActivity extends AppCompatActivity {
         });
     }
 
-    private void moveMainActivity(UserRepository userRepository) {
+    private void moveMainActivity() {
         Button signInButton = (Button) findViewById(R.id.signInButton);
         signInButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                final EditText email = (EditText) findViewById(R.id.signInEmailEditText);
-                final EditText password = (EditText) findViewById(R.id.signInPasswordEditText);
-                final FirebaseAuth mAuth = FirebaseAuth.getInstance();
-                mAuth.signInWithEmailAndPassword(email.getText().toString(), password.getText().toString())
-                        .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                            @Override
-                            public void onComplete(@NonNull Task<AuthResult> task) {
-                                if (task.isSuccessful()) {
-                                    // Sign in success, update UI with the signed-in user's information
-                                    Log.d(TAG, "signInWithEmail:success");
-                                    FirebaseUser currentUser = mAuth.getCurrentUser();
-                                    Intent intent = new Intent(SignInActivity.this, MainActivity.class);
-                                    intent.putExtra("currentUser", currentUser);
-                                    startActivity(intent);
-                                    finish();
-                                    return;
-                                }
-                                // If sign in fails, display a message to the user.
-                                Log.w(TAG, "signInWithEmail:failure", task.getException());
-                            }
-                        });
+                authWithInputText();
+                Intent intent = new Intent(SignInActivity.this, MainActivity.class);
+                startActivity(intent);
+                finish();
             }
         });
+    }
+
+    private void authWithInputText() {
+        final EditText email = (EditText) findViewById(R.id.signInEmailEditText);
+        final EditText password = (EditText) findViewById(R.id.signInPasswordEditText);
+        UserRepository userRepository = new FirebaseUserRepository();
+        UserService userService = new UserServiceImpl(userRepository);
+        userService.auth(email.getText().toString(), password.getText().toString());
     }
 }
