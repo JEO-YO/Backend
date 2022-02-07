@@ -18,8 +18,6 @@ import com.unittest.chatservice.user.service.UserServiceImpl;
 
 public class SignInActivity extends AppCompatActivity {
 
-    private static final String TAG = "MSG";
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,8 +45,7 @@ public class SignInActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 authWithInputText();
-                Intent intent = new Intent(SignInActivity.this, MainActivity.class);
-                startActivity(intent);
+                startActivity(new Intent(SignInActivity.this, MainActivity.class));
                 finish();
             }
         });

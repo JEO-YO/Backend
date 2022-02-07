@@ -16,8 +16,6 @@ public class FirebaseUserRepository implements UserRepository {
 
     private static final String TAG = "MSG";
     private final FirebaseAuth mAuth = FirebaseAuth.getInstance();
-    private final FirebaseDatabase database = FirebaseDatabase.getInstance();
-    private final DatabaseReference reference = database.getReference();
     public static final String TABLE = "ChatUsers";
 
     @Override
@@ -54,6 +52,7 @@ public class FirebaseUserRepository implements UserRepository {
 
     private void save(String id, String email, String password) {
         User user = new User(id, email, password);
+        final DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
         DatabaseReference basePath = reference.child(TABLE).child(String.valueOf(user.getId()));
         basePath.setValue(user);
     }

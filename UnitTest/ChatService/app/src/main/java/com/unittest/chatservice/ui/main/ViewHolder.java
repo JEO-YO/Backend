@@ -17,11 +17,12 @@ class ViewHolder extends RecyclerView.ViewHolder {
 
     ViewHolder(Context context, View itemView) {
         super(itemView);
-        textView = itemView.findViewById(R.id.textView);
-        button = itemView.findViewById(R.id.button);
+        textView = itemView.findViewById(R.id.itemListTextView);
+        button = itemView.findViewById(R.id.itemListButton);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                // 버튼 클릭 시 채팅방으로 이동
                 String strText = textView.getText().toString();
                 Toast.makeText(context, strText, Toast.LENGTH_SHORT).show();
             }

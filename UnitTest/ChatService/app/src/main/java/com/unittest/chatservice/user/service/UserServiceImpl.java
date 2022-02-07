@@ -1,7 +1,5 @@
 package com.unittest.chatservice.user.service;
 
-import com.google.firebase.auth.FirebaseAuth;
-import com.unittest.chatservice.user.model.User;
 import com.unittest.chatservice.user.repository.UserRepository;
 
 public class UserServiceImpl implements UserService {

@@ -7,7 +7,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 
@@ -19,63 +18,60 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.unittest.chatservice.R;
-import com.unittest.chatservice.ui.signin.SignInActivity;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
-    private final FirebaseDatabase database = FirebaseDatabase.getInstance();
-    private final DatabaseReference reference = database.getReference();
+    private static final String EMAIL = "email";
+    private static final String TAG = "MSG";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this, RecyclerView.VERTICAL, false));
-
-        Adapter adapter = new Adapter();
-        getSendData();
+        makeRecyclerView();
 
         final FirebaseAuth mAuth = FirebaseAuth.getInstance();
-        FirebaseUser currentUser = mAuth.getCurrentUser();
-        System.out.println("currentUser.getUid() = " + currentUser.getUid());
+        final FirebaseUser currentUser = mAuth.getCurrentUser();
+        System.out.println("currentUser = " + currentUser.getUid());
+    }
 
+    private void makeRecyclerView() {
+        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this, RecyclerView.VERTICAL, false));
+        setUserEmails(recyclerView);
+    }
+
+
+    private void setUserEmails(RecyclerView recyclerView) {
+        final DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
         reference.child(TABLE).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DataSnapshot> task) {
                 if (!task.isSuccessful()) {
-                    Log.e("MSG", "Error getting data", task.getException());
+                    Log.e(TAG, "Error getting data", task.getException());
                     return;
                 }
-                final List<String> userNames = getUserNames(task);
-                for (int i = 0; i < userNames.size(); i++) {
-                    adapter.setArrayData(userNames.get(i));
+                final List<String> userEmails = getUserEmails(task);
+                final Adapter adapter = new Adapter();
+                for (int i = 0; i < userEmails.size(); i++) {
+                    adapter.setArrayData(userEmails.get(i));
                 }
                 recyclerView.setAdapter(adapter);
             }
         });
-
     }
 
-    private List<String> getUserNames(Task<DataSnapshot> task) {
-        final List<String> userNames = new ArrayList<>();
+    private List<String> getUserEmails(Task<DataSnapshot> task) {
         Iterable<DataSnapshot> children = task.getResult().getChildren();
+        final List<String> userNames = new ArrayList<>();
         for (DataSnapshot data : children) {
-            String name = data.child("email").getValue().toString();
-            userNames.add(name);
+            final String email = data.child(EMAIL).getValue().toString();
+            userNames.add(email);
         }
         return userNames;
-    }
-
-
-    private void getSendData() {
-        Intent intent = getIntent();
-        String currentUser = intent.getStringExtra("currentUser");
-        System.out.println("currentUser = " + currentUser);
     }
 }
