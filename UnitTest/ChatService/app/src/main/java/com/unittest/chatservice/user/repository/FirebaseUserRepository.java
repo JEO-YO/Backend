@@ -4,19 +4,18 @@ import static com.unittest.chatservice.user.model.User.*;
 
 import android.util.Log;
 
-import androidx.annotation.NonNull;
-
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.unittest.chatservice.user.model.User;
 
+import java.util.Objects;
+
 public class FirebaseUserRepository implements UserRepository {
 
     private static final String TAG = "MSG";
+    private static final String CREATE_USER_FAIL_MESSAGE = "createUserWithEmail:failure";
+    private static final String SIGN_IN_FAIL_MESSAGE = "signInWithEmail:failure";
     private final FirebaseAuth mAuth = FirebaseAuth.getInstance();
 
     @Override
@@ -24,12 +23,11 @@ public class FirebaseUserRepository implements UserRepository {
         mAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
-                        Log.d(TAG, "createUserWithEmail:success");
-                        String uid = task.getResult().getUser().getUid();
+                        final String uid = Objects.requireNonNull(Objects.requireNonNull(task.getResult()).getUser()).getUid();
                         save(uid, email, password);
                         return;
                     }
-                    Log.w(TAG, "createUserWithEmail:failure", task.getException());
+                    Log.w(TAG, CREATE_USER_FAIL_MESSAGE, task.getException());
                 });
     }
 
@@ -37,16 +35,14 @@ public class FirebaseUserRepository implements UserRepository {
     public void signIn(String email, String password) {
         mAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
-                        Log.d(TAG, "signInWithEmail:Success");
-                        return;
+                    if (!task.isSuccessful()) {
+                        Log.w(TAG, SIGN_IN_FAIL_MESSAGE, task.getException());
                     }
-                    Log.w(TAG, "signInWithEmail:failure", task.getException());
                 });
     }
 
     private void save(String id, String email, String password) {
-        User user = new User(id, email, password);
+        final User user = new User(id, email, password);
         final DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
         DatabaseReference basePath = reference.child(USER_TABLE).child(String.valueOf(user.getId()));
         basePath.setValue(user);

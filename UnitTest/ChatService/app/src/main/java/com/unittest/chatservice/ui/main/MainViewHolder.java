@@ -12,10 +12,11 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.unittest.chatservice.R;
 import com.unittest.chatservice.ui.chatroom.ChatRoomActivity;
 
-class MainViewHolder extends RecyclerView.ViewHolder {
+public class MainViewHolder extends RecyclerView.ViewHolder {
 
-    public TextView textView;
-    public Button button;
+    public final TextView textView;
+    public final Button button;
+    public static final String SEND_DATA_KEY = "userId";
 
     MainViewHolder(Context context, View itemView) {
         super(itemView);
@@ -25,7 +26,7 @@ class MainViewHolder extends RecyclerView.ViewHolder {
             String strText = textView.getText().toString();
             Toast.makeText(context, strText, Toast.LENGTH_SHORT).show();
             Intent intent = new Intent(context, ChatRoomActivity.class);
-            intent.putExtra("userId", strText);
+            intent.putExtra(SEND_DATA_KEY, strText);
             context.startActivity(intent);
         });
     }

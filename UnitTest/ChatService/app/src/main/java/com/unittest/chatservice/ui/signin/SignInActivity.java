@@ -4,7 +4,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
@@ -18,6 +17,8 @@ import com.unittest.chatservice.user.service.UserServiceImpl;
 
 public class SignInActivity extends AppCompatActivity {
 
+    private final UserRepository userRepository = new FirebaseUserRepository();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -29,33 +30,26 @@ public class SignInActivity extends AppCompatActivity {
     }
 
     private void moveSignUpActivity() {
-        Button signUpButton = (Button) findViewById(R.id.signUpButton);
-        signUpButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(new Intent(SignInActivity.this, SignUpActivity.class));
-                finish();
-            }
+        final Button signUpButton = findViewById(R.id.signUpButton);
+        signUpButton.setOnClickListener(view -> {
+            startActivity(new Intent(SignInActivity.this, SignUpActivity.class));
+            finish();
         });
     }
 
     private void moveMainActivity() {
-        Button signInButton = (Button) findViewById(R.id.signInButton);
-        signInButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                authWithInputText();
-                startActivity(new Intent(SignInActivity.this, MainActivity.class));
-                finish();
-            }
+        final Button signInButton = findViewById(R.id.signInButton);
+        signInButton.setOnClickListener(view -> {
+            authWithInputText();
+            startActivity(new Intent(SignInActivity.this, MainActivity.class));
+            finish();
         });
     }
 
     private void authWithInputText() {
-        final EditText email = (EditText) findViewById(R.id.signInEmailEditText);
-        final EditText password = (EditText) findViewById(R.id.signInPasswordEditText);
-        UserRepository userRepository = new FirebaseUserRepository();
-        UserService userService = new UserServiceImpl(userRepository);
+        final EditText email = findViewById(R.id.signInEmailEditText);
+        final EditText password = findViewById(R.id.signInPasswordEditText);
+        final UserService userService = new UserServiceImpl(userRepository);
         userService.auth(email.getText().toString(), password.getText().toString());
     }
 }

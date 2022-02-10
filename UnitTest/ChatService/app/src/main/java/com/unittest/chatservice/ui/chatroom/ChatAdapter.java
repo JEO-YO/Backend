@@ -31,16 +31,16 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatViewHolder> {
     @Override
     public ChatViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         if (viewType == MSG_TYPE_RIGHT) {
-            View view = LayoutInflater.from(mContext).inflate(R.layout.chat_item_right, parent, false);
+            final View view = LayoutInflater.from(mContext).inflate(R.layout.chat_item_right, parent, false);
             return new ChatViewHolder(view);
         }
-        View view = LayoutInflater.from(mContext).inflate(R.layout.chat_item_left, parent, false);
+        final View view = LayoutInflater.from(mContext).inflate(R.layout.chat_item_left, parent, false);
         return new ChatViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull ChatViewHolder holder, int position) {
-        ChatData chatData = mChat.get(position);
+        final ChatData chatData = mChat.get(position);
         holder.showMessage.setText(chatData.getMessage());
     }
 
@@ -51,7 +51,8 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatViewHolder> {
 
     @Override
     public int getItemViewType(int position) {
-        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+        final FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+        assert currentUser != null;
         if (mChat.get(position).getSender().equals(currentUser.getUid())) {
             return MSG_TYPE_RIGHT;
         }
