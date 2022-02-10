@@ -20,6 +20,14 @@
         android:textSize="30sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imageView_thumbnail"/>
+    <TextView
+        android:id="@+id/textView_writer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="게시자"
+        android:textSize="30sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView_key"/>
 
     <TextView
         android:id="@+id/textView_classify"
@@ -28,7 +36,7 @@
         android:text="분류"
         android:textSize="30sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView_key"
+        app:layout_constraintTop_toBottomOf="@+id/textView_writer"
         />
 
     <TextView

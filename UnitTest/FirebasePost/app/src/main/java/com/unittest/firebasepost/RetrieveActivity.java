@@ -30,7 +30,7 @@ import java.util.Map;
 public class RetrieveActivity extends AppCompatActivity {
     private ImageView imageView_thumbnail;
 
-    private TextView textView_key, textView_classify, textView_category, textView_period, textView_frequency, textView_memberCnt,
+    private TextView textView_key, textView_writer, textView_classify, textView_category, textView_period, textView_frequency, textView_memberCnt,
             textView_memberCdt, textView_title, textView_description;
     private Button button_retrieve;
     private ArrayList<Post> posts;
@@ -108,6 +108,7 @@ public class RetrieveActivity extends AppCompatActivity {
         Post post = posts.get(posts.size()-1);
 
         textView_key.setText(post.getKey());
+        textView_writer.setText(post.getWriter());
         textView_classify.setText(post.getClassify());
         textView_category.setText(post.getCategory());
         textView_period.setText(post.getPeriod());
@@ -125,6 +126,7 @@ public class RetrieveActivity extends AppCompatActivity {
         imageView_thumbnail = findViewById(R.id.imageView_thumbnail);
 
         textView_key = findViewById(R.id.textView_key);
+        textView_writer = findViewById(R.id.textView_writer);
         textView_classify = findViewById(R.id.textView_classify);
         textView_category = findViewById(R.id.textView_category);
         textView_period = findViewById(R.id.textView_period);
