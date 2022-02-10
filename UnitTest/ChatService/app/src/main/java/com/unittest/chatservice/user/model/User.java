@@ -5,6 +5,7 @@ public class User {
     private final String id;
     private final String email;
     private final String password;
+    public static final String USER_TABLE = "ChatUsers";
 
     public User(String id, String email, String password) {
         this.id = id;

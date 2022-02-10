@@ -12,25 +12,25 @@ import com.unittest.chatservice.R;
 
 import java.util.ArrayList;
 
-public class Adapter extends RecyclerView.Adapter<ViewHolder> {
+public class MainAdapter extends RecyclerView.Adapter<MainViewHolder> {
 
     private final ArrayList<String> arrayList;
 
-    public Adapter() {
+    public MainAdapter() {
         arrayList = new ArrayList<>();
     }
 
     @NonNull
     @Override
-    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public MainViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         Context context = parent.getContext();
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View view = inflater.inflate(R.layout.item_list, parent, false);
-        return new ViewHolder(context, view);
+        return new MainViewHolder(context, view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull MainViewHolder holder, int position) {
         String text = arrayList.get(position);
         holder.textView.setText(text);
     }
@@ -38,7 +38,7 @@ public class Adapter extends RecyclerView.Adapter<ViewHolder> {
     @Override
     public int getItemCount() {
         return arrayList.size();
-    } // 데이터를 입력
+    }
 
     public void setArrayData(String strData) {
         arrayList.add(strData);

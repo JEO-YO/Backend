@@ -1,6 +1,6 @@
 package com.unittest.chatservice.ui.main;
 
-import static com.unittest.chatservice.user.repository.FirebaseUserRepository.TABLE;
+import static com.unittest.chatservice.user.model.User.*;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -12,8 +12,6 @@ import android.util.Log;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -24,7 +22,7 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
-    private static final String EMAIL = "email";
+    private static final String ID = "id";
     private static final String TAG = "MSG";
 
     @Override
@@ -33,45 +31,38 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         makeRecyclerView();
-
-        final FirebaseAuth mAuth = FirebaseAuth.getInstance();
-        final FirebaseUser currentUser = mAuth.getCurrentUser();
-        System.out.println("currentUser = " + currentUser.getUid());
     }
 
     private void makeRecyclerView() {
-        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
+        RecyclerView recyclerView = findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this, RecyclerView.VERTICAL, false));
-        setUserEmails(recyclerView);
+        setUserIds(recyclerView);
     }
 
-
-    private void setUserEmails(RecyclerView recyclerView) {
+    private void setUserIds(RecyclerView recyclerView) {
         final DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
-        reference.child(TABLE).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DataSnapshot> task) {
-                if (!task.isSuccessful()) {
-                    Log.e(TAG, "Error getting data", task.getException());
-                    return;
-                }
-                final List<String> userEmails = getUserEmails(task);
-                final Adapter adapter = new Adapter();
-                for (int i = 0; i < userEmails.size(); i++) {
-                    adapter.setArrayData(userEmails.get(i));
-                }
-                recyclerView.setAdapter(adapter);
+        reference.child(USER_TABLE).get().addOnCompleteListener(task -> {
+            if (!task.isSuccessful()) {
+                Log.e(TAG, "Error getting data", task.getException());
+                return;
             }
+            final List<String> usersId = getUsersId(task);
+            final MainAdapter adapter = new MainAdapter();
+            for (int i = 0; i < usersId.size(); i++) {
+                adapter.setArrayData(usersId.get(i));
+            }
+            recyclerView.setAdapter(adapter);
         });
     }
 
-    private List<String> getUserEmails(Task<DataSnapshot> task) {
+    private List<String> getUsersId(Task<DataSnapshot> task) {
         Iterable<DataSnapshot> children = task.getResult().getChildren();
         final List<String> userNames = new ArrayList<>();
         for (DataSnapshot data : children) {
-            final String email = data.child(EMAIL).getValue().toString();
+            final String email = data.child(ID).getValue().toString();
             userNames.add(email);
         }
         return userNames;
     }
+
 }
