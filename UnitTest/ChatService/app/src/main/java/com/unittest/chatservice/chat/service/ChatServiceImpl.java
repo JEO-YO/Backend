@@ -30,11 +30,13 @@ public class ChatServiceImpl implements ChatService {
 
     @Override
     public void read(String myId, String userId, RecyclerView messageView) {
+        final List<ChatData> mChat = new ArrayList<>();
         chatRepository.getChatData().addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
+                mChat.clear();
                 for (DataSnapshot data : snapshot.getChildren()) {
-                    messageView.setAdapter(new ChatAdapter(ChatRoomActivity.context, getMyChatData(data, myId, userId)));
+                    messageView.setAdapter(new ChatAdapter(ChatRoomActivity.context, getMyChatData(mChat, data, myId, userId)));
                 }
             }
 
@@ -44,8 +46,7 @@ public class ChatServiceImpl implements ChatService {
         });
     }
 
-    private List<ChatData> getMyChatData(DataSnapshot data, String myId, String userId) {
-        final List<ChatData> mChat = new ArrayList<>();
+    private List<ChatData> getMyChatData(List<ChatData> mChat, DataSnapshot data, String myId, String userId) {
         final ChatData chat = data.getValue(ChatData.class);
         assert chat != null;
         if (chat.getReceiver().equals(myId) && chat.getSender().equals(userId) ||

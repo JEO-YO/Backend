@@ -1,7 +1,6 @@
 package com.unittest.chatservice.ui.chatroom;
 
 import static com.unittest.chatservice.chat.dto.ChatData.*;
-import static com.unittest.chatservice.ui.main.MainViewHolder.SEND_DATA_KEY;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -28,12 +27,12 @@ import com.unittest.chatservice.chat.repository.FirebaseChatRepository;
 import com.unittest.chatservice.chat.service.ChatService;
 import com.unittest.chatservice.chat.service.ChatServiceImpl;
 
-public class
-ChatRoomActivity extends AppCompatActivity {
+public class ChatRoomActivity extends AppCompatActivity {
 
     private final ChatRepository chatRepository = new FirebaseChatRepository();
     private final ChatService chatService = new ChatServiceImpl(chatRepository);
     private RecyclerView messageView;
+    private static final String GET_DATA_NAME = "userId";
     private static final String NOT_ALLOWED_EMPTY_MESSAGE = "You can't send empty message";
     @SuppressLint("StaticFieldLeak")
     public static Context context;
@@ -42,13 +41,12 @@ ChatRoomActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat_room);
-        context = this;
         makeRecyclerView();
+        context = this;
 
-        final String userId = getIntent().getStringExtra(SEND_DATA_KEY);
+        final String userId = getIntent().getStringExtra(GET_DATA_NAME);
         final FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
         clickSendButton(userId, currentUser);
-
         final DatabaseReference chatUsers = FirebaseDatabase.getInstance().getReference(CHAT_DATA_TABLE).child(userId);
         messageEventListener(userId, currentUser, chatUsers);
     }
