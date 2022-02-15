@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">FirebaseReview</string>
+    <string name="review_question_count">5</string>
 </resources>
