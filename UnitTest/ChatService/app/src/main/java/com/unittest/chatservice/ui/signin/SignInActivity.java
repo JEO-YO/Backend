@@ -8,7 +8,7 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.unittest.chatservice.R;
-import com.unittest.chatservice.ui.main.MainActivity;
+import com.unittest.chatservice.ui.userlist.UserListActivity;
 import com.unittest.chatservice.ui.signup.SignUpActivity;
 import com.unittest.chatservice.user.repository.FirebaseUserRepository;
 import com.unittest.chatservice.user.repository.UserRepository;
@@ -26,7 +26,6 @@ public class SignInActivity extends AppCompatActivity {
 
         moveSignUpActivity();
         moveMainActivity();
-
     }
 
     private void moveSignUpActivity() {
@@ -41,7 +40,7 @@ public class SignInActivity extends AppCompatActivity {
         final Button signInButton = findViewById(R.id.signInButton);
         signInButton.setOnClickListener(view -> {
             authWithInputText();
-            startActivity(new Intent(SignInActivity.this, MainActivity.class));
+            startActivity(new Intent(SignInActivity.this, UserListActivity.class));
             finish();
         });
     }

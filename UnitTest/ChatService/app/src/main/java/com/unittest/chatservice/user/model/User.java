@@ -6,6 +6,7 @@ public class User {
     private final String email;
     private final String password;
     public static final String USER_TABLE = "ChatUsers";
+    public static final String EMAIL_TABLE = "email";
 
     public User(String id, String email, String password) {
         this.id = id;

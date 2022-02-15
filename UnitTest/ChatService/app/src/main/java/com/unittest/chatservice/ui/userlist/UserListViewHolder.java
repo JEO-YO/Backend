@@ -1,4 +1,4 @@
-package com.unittest.chatservice.ui.main;
+package com.unittest.chatservice.ui.userlist;
 
 import android.content.Context;
 import android.content.Intent;
@@ -12,20 +12,20 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.unittest.chatservice.R;
 import com.unittest.chatservice.ui.chatroom.ChatRoomActivity;
 
-public class MainViewHolder extends RecyclerView.ViewHolder {
+public class UserListViewHolder extends RecyclerView.ViewHolder {
 
     public final TextView textView;
     public final Button button;
-    public static final String SEND_DATA_KEY = "userId";
+    public static final String SEND_DATA_KEY = "userEmail";
 
-    MainViewHolder(Context context, View itemView) {
+    UserListViewHolder(Context context, View itemView) {
         super(itemView);
         textView = itemView.findViewById(R.id.itemListTextView);
         button = itemView.findViewById(R.id.itemListButton);
         button.setOnClickListener(view -> {
-            String strText = textView.getText().toString();
+            final String strText = textView.getText().toString();
             Toast.makeText(context, strText, Toast.LENGTH_SHORT).show();
-            Intent intent = new Intent(context, ChatRoomActivity.class);
+            final Intent intent = new Intent(context, ChatRoomActivity.class);
             intent.putExtra(SEND_DATA_KEY, strText);
             context.startActivity(intent);
         });

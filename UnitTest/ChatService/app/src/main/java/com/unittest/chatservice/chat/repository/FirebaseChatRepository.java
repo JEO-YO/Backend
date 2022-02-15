@@ -12,7 +12,6 @@ public class FirebaseChatRepository implements ChatRepository {
     public void saveChat(ChatData chatData) {
         final DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
         reference.child(CHAT_DATA_TABLE).push().setValue(chatData);
-
     }
 
     @Override

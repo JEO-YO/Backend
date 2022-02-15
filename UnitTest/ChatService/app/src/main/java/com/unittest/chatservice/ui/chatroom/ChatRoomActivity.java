@@ -1,6 +1,8 @@
 package com.unittest.chatservice.ui.chatroom;
 
 import static com.unittest.chatservice.chat.dto.ChatData.*;
+import static com.unittest.chatservice.user.model.User.EMAIL_TABLE;
+import static com.unittest.chatservice.user.model.User.USER_TABLE;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -27,12 +29,14 @@ import com.unittest.chatservice.chat.repository.FirebaseChatRepository;
 import com.unittest.chatservice.chat.service.ChatService;
 import com.unittest.chatservice.chat.service.ChatServiceImpl;
 
+import java.util.Objects;
+
 public class ChatRoomActivity extends AppCompatActivity {
 
     private final ChatRepository chatRepository = new FirebaseChatRepository();
     private final ChatService chatService = new ChatServiceImpl(chatRepository);
     private RecyclerView messageView;
-    private static final String GET_DATA_NAME = "userId";
+    private static final String GET_DATA_NAME = "userEmail";
     private static final String NOT_ALLOWED_EMPTY_MESSAGE = "You can't send empty message";
     @SuppressLint("StaticFieldLeak")
     public static Context context;
@@ -44,7 +48,30 @@ public class ChatRoomActivity extends AppCompatActivity {
         makeRecyclerView();
         context = this;
 
-        final String userId = getIntent().getStringExtra(GET_DATA_NAME);
+        final String email = getIntent().getStringExtra(GET_DATA_NAME);
+        startChatWith(email);
+    }
+
+    private void startChatWith(String email) {
+        final DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
+        final DatabaseReference child = mDatabase.child(USER_TABLE);
+        child.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                    if (Objects.requireNonNull(dataSnapshot.child(EMAIL_TABLE).getValue()).toString().equals(email)) {
+                        chat(dataSnapshot.getKey());
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+            }
+        });
+    }
+
+    private void chat(String userId) {
         final FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
         clickSendButton(userId, currentUser);
         final DatabaseReference chatUsers = FirebaseDatabase.getInstance().getReference(CHAT_DATA_TABLE).child(userId);
@@ -82,7 +109,7 @@ public class ChatRoomActivity extends AppCompatActivity {
     private void makeRecyclerView() {
         messageView = findViewById(R.id.messageRecyclerView);
         messageView.setHasFixedSize(true);
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getApplicationContext());
+        final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getApplicationContext());
         linearLayoutManager.setStackFromEnd(true);
         messageView.setLayoutManager(linearLayoutManager);
     }

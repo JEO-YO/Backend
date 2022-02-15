@@ -1,4 +1,4 @@
-package com.unittest.chatservice.ui.main;
+package com.unittest.chatservice.ui.userlist;
 
 import static com.unittest.chatservice.user.model.User.*;
 
@@ -19,23 +19,23 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class MainActivity extends AppCompatActivity {
+public class UserListActivity extends AppCompatActivity {
 
     private static final String ID = "id";
-    private static final String TAG = "MSG";
+    private static final String TAG = "JEOYO";
     private static final int MINIMUM_SIZE = 0;
     private static final String GET_DATA_ERROR_MESSAGE = "Error getting data";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_user_list);
 
         makeRecyclerView();
     }
 
     private void makeRecyclerView() {
-        RecyclerView recyclerView = findViewById(R.id.recyclerView);
+        final RecyclerView recyclerView = findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this, RecyclerView.VERTICAL, false));
         setUserIds(recyclerView);
     }
@@ -48,7 +48,7 @@ public class MainActivity extends AppCompatActivity {
                 return;
             }
             final List<String> usersId = getUsersId(task);
-            final MainAdapter adapter = new MainAdapter();
+            final UserListAdapter adapter = new UserListAdapter();
             for (int i = MINIMUM_SIZE; i < usersId.size(); i++) {
                 adapter.setArrayData(usersId.get(i));
             }
@@ -59,10 +59,9 @@ public class MainActivity extends AppCompatActivity {
     private List<String> getUsersId(Task<DataSnapshot> task) {
         final List<String> userNames = new ArrayList<>();
         for (DataSnapshot data : Objects.requireNonNull(task.getResult()).getChildren()) {
-            final String email = Objects.requireNonNull(data.child(ID).getValue()).toString();
+            final String email = Objects.requireNonNull(data.child(EMAIL_TABLE).getValue()).toString();
             userNames.add(email);
         }
         return userNames;
     }
-
 }
