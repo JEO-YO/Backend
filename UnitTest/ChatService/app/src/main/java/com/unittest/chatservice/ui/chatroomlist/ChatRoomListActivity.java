@@ -8,8 +8,10 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.Button;
 
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -17,6 +19,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.unittest.chatservice.R;
+import com.unittest.chatservice.ui.userlist.UserListActivity;
 import com.unittest.chatservice.ui.userlist.UserListAdapter;
 
 import java.util.ArrayList;
@@ -43,6 +46,23 @@ public class ChatRoomListActivity extends AppCompatActivity {
         setContentView(R.layout.activity_chat_room_list);
 
         makeRecyclerView();
+        moveUserList();
+        refresh();
+    }
+
+    private void moveUserList() {
+        final Button buttonToUserList = findViewById(R.id.userListButton);
+        buttonToUserList.setOnClickListener(view -> {
+            startActivity(new Intent(this, UserListActivity.class));
+        });
+    }
+
+    private void refresh() {
+        final Button buttonRefresh = findViewById(R.id.refreshButton);
+        buttonRefresh.setOnClickListener(view -> {
+            startActivity(new Intent(this, ChatRoomListActivity.class));
+            finish();
+        });
     }
 
     private void makeRecyclerView() {
@@ -64,7 +84,7 @@ public class ChatRoomListActivity extends AppCompatActivity {
     }
 
     private void setChatRoomListAdapter(RecyclerView recyclerView, List<String> saveUsersEmail) {
-        final ChatRoomListAdapter adapter = new ChatRoomListAdapter();
+        final UserListAdapter adapter = new UserListAdapter();
         for (int i = MINIMUM_SIZE; i < saveUsersEmail.size(); i++) {
             adapter.setArrayData(saveUsersEmail.get(i));
         }

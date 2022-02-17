@@ -17,6 +17,12 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="150dp"
             android:text="친구목록"/>
+        <Button
+            android:id="@+id/refreshButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="150dp"
+            android:text="새로고침"/>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/chatRoomRecyclerView"
