@@ -1,4 +1,4 @@
-package com.unittest.chatservice.ui.userlist;
+package com.unittest.chatservice.ui.chatroomlist;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -13,35 +13,35 @@ import com.unittest.chatservice.R;
 import java.util.ArrayList;
 import java.util.List;
 
-public class UserListAdapter extends RecyclerView.Adapter<UserListViewHolder> {
+public class ChatRoomListAdapter extends RecyclerView.Adapter<ChatRoomListViewHolder> {
 
-    private final List<String> userList;
+    private final List<String> chatRoomList;
 
-    public UserListAdapter() {
-        userList = new ArrayList<>();
+    public ChatRoomListAdapter() {
+        chatRoomList = new ArrayList<>();
     }
 
     @NonNull
     @Override
-    public UserListViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public ChatRoomListViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         final Context context = parent.getContext();
         final LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         final View view = inflater.inflate(R.layout.user_list, parent, false);
-        return new UserListViewHolder(context, view);
+        return new ChatRoomListViewHolder(context, view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull UserListViewHolder holder, int position) {
-        final String text = userList.get(position);
-        holder.textView.setText(text);
+    public void onBindViewHolder(@NonNull ChatRoomListViewHolder holder, int position) {
+        final String chatRoom = chatRoomList.get(position);
+        holder.textView.setText(chatRoom);
     }
 
     @Override
     public int getItemCount() {
-        return userList.size();
+        return chatRoomList.size();
     }
 
     public void setArrayData(String strData) {
-        userList.add(strData);
+        chatRoomList.add(strData);
     }
 }

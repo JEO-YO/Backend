@@ -21,7 +21,6 @@ import java.util.Objects;
 
 public class UserListActivity extends AppCompatActivity {
 
-    private static final String ID = "id";
     private static final String TAG = "JEOYO";
     private static final int MINIMUM_SIZE = 0;
     private static final String GET_DATA_ERROR_MESSAGE = "Error getting data";
@@ -47,21 +46,25 @@ public class UserListActivity extends AppCompatActivity {
                 Log.e(TAG, GET_DATA_ERROR_MESSAGE, task.getException());
                 return;
             }
-            final List<String> usersId = getUsersId(task);
-            final UserListAdapter adapter = new UserListAdapter();
-            for (int i = MINIMUM_SIZE; i < usersId.size(); i++) {
-                adapter.setArrayData(usersId.get(i));
-            }
-            recyclerView.setAdapter(adapter);
+            final List<String> usersEmail = getUsersEmail(task);
+            setUserListAdapter(recyclerView, usersEmail);
         });
     }
 
-    private List<String> getUsersId(Task<DataSnapshot> task) {
-        final List<String> userNames = new ArrayList<>();
+    private void setUserListAdapter(RecyclerView recyclerView, List<String> usersEmail) {
+        final UserListAdapter adapter = new UserListAdapter();
+        for (int i = MINIMUM_SIZE; i < usersEmail.size(); i++) {
+            adapter.setArrayData(usersEmail.get(i));
+        }
+        recyclerView.setAdapter(adapter);
+    }
+
+    private List<String> getUsersEmail(Task<DataSnapshot> task) {
+        final List<String> usersEmail = new ArrayList<>();
         for (DataSnapshot data : Objects.requireNonNull(task.getResult()).getChildren()) {
             final String email = Objects.requireNonNull(data.child(EMAIL_TABLE).getValue()).toString();
-            userNames.add(email);
+            usersEmail.add(email);
         }
-        return userNames;
+        return usersEmail;
     }
 }

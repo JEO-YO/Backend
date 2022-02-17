@@ -20,8 +20,8 @@ public class UserListViewHolder extends RecyclerView.ViewHolder {
 
     UserListViewHolder(Context context, View itemView) {
         super(itemView);
-        textView = itemView.findViewById(R.id.itemListTextView);
-        button = itemView.findViewById(R.id.itemListButton);
+        textView = itemView.findViewById(R.id.userListTextView);
+        button = itemView.findViewById(R.id.chatRoomButton);
         button.setOnClickListener(view -> {
             final String strText = textView.getText().toString();
             Toast.makeText(context, strText, Toast.LENGTH_SHORT).show();
