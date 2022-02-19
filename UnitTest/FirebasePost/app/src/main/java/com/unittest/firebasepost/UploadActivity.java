@@ -32,7 +32,6 @@ import java.io.ByteArrayOutputStream;
 import java.util.HashMap;
 
 public class UploadActivity extends AppCompatActivity {
-    private FirebaseAuth mAuth;
     private ImageView imageView_thumbnail;
 
     private EditText editText_classify, editText_category, editText_period, editText_frequency, editText_memberCnt, editText_memberCdt, editText_title, editText_description;
@@ -45,33 +44,26 @@ public class UploadActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_upload);
-        mAuth = FirebaseAuth.getInstance();
+
         setId();
-        setOnclick();
-    }
-
-
-    private String setString(EditText editText) {
-        return editText.getText().toString();
+        setonClick();
     }
 
     private void setData() {
+        classify = editText_classify.getText().toString();
+        category = editText_category.getText().toString();
+        period = editText_period.getText().toString();
+        frequency = editText_frequency.getText().toString();
+        memberCnt = editText_memberCnt.getText().toString();
+        memberCdt = editText_memberCdt.getText().toString();
+        title = editText_title.getText().toString();
+        description = editText_description.getText().toString();
 
-        classify = setString(editText_classify);
-        category = setString(editText_category);
-        period = setString(editText_period);
-        frequency = setString(editText_frequency);
-        memberCnt = setString(editText_memberCnt);
-        memberCdt = setString(editText_memberCdt);
-        title = setString(editText_title);
-        description = setString(editText_description);
-
-//        String key = createKey();
         upload();
-//        checkDuplicatedKey(key, post);
     }
 
     private void upload() {
+        FirebaseAuth mAuth = FirebaseAuth.getInstance();
         String writer = mAuth.getCurrentUser().getUid();
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
         String key = reference.child("Posts").push().getKey();
@@ -151,7 +143,7 @@ public class UploadActivity extends AppCompatActivity {
         });
     }
 
-    private void setOnclick() {
+    private void setonClick() {
         button_upload.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
