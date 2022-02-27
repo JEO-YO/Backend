@@ -19,6 +19,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".ReviewActivity"/>
+        <activity android:name=".RetrieveActivity"/>
     </application>
 
 </manifest>

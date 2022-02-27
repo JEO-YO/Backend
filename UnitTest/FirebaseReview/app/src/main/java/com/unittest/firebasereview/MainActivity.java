@@ -58,7 +58,7 @@ public class MainActivity extends AppCompatActivity {
                                     Toast.LENGTH_SHORT).show();
                             FirebaseUser user = mAuth.getCurrentUser();
 
-                            startActivity(new Intent(MainActivity.this, ReviewActivity.class));
+                            startActivity(new Intent(MainActivity.this, RetrieveActivity.class));
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "signInWithEmail:failure", task.getException());
