@@ -1,9 +1,11 @@
 package com.unittest.firebasereview;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
@@ -17,18 +19,27 @@ import androidx.appcompat.app.AppCompatActivity;
 public class ReviewActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private Button upload_btn;
+    private User target;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_review);
+        target = getIntent().getParcelableExtra("target");
+        Toast.makeText(this, target.getName(), Toast.LENGTH_SHORT).show();
+
         mAuth = FirebaseAuth.getInstance();
         upload_btn = findViewById(R.id.upload_btn);
         upload_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 upload();
+                Intent intent = new Intent(ReviewActivity.this, RetrieveActivity.class);
+                intent.putExtra("target", target);
+                startActivity(intent);
             }
         });
+
+
     }
 
     private List<String> getReviewFromEditText(){
@@ -54,7 +65,7 @@ public class ReviewActivity extends AppCompatActivity {
 
     private void upload(){
         String writer = mAuth.getCurrentUser().getUid();
-        String target = "unknown";
+        String target = this.target.getName();
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child("Reviews").child(target).child(writer);
         reference.setValue(getReview());
 

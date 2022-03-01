@@ -44,7 +44,8 @@ public class RetrieveActivity extends AppCompatActivity {
 
 
     private void retrieveData() {
-        DatabaseReference ref1 = FirebaseDatabase.getInstance().getReference().child("Reviews").child("unknown");
+        User target = getIntent().getParcelableExtra("target");
+        DatabaseReference ref1 = FirebaseDatabase.getInstance().getReference().child("Reviews").child(target.getName());
 
 
         ref1.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -56,7 +57,7 @@ public class RetrieveActivity extends AppCompatActivity {
                 for (DataSnapshot dsp : dataSnapshot.getChildren()) {
                     reviews.add(dsp.getValue(Review.class)); //add result into array list
                 }
-                Toast.makeText(RetrieveActivity.this, String.valueOf(reviews.size()), Toast.LENGTH_SHORT).show();
+//                Toast.makeText(RetrieveActivity.this, String.valueOf(reviews.size()), Toast.LENGTH_SHORT).show();
                 setReviewEditText();
             }
 
