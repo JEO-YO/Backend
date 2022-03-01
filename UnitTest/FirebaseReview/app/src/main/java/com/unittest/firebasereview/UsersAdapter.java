@@ -1,6 +1,8 @@
 package com.unittest.firebasereview;
 
 import android.content.Context;
+import android.content.Intent;
+import android.os.Parcelable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -37,7 +39,6 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.ViewHolder> 
         }
         String text = users.get(position).getName();
         holder.textView_user.setText(text);
-
     }
 
     // getItemCount() - 전체 데이터 갯수 리턴.
@@ -70,13 +71,19 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.ViewHolder> 
 
         @Override
         public void onClick(View view) {
-
+            Context context = view.getContext();
+            Intent intent = new Intent(context, ReviewActivity.class);
+            intent.putExtra("target", (Parcelable) users.get(getLayoutPosition()));
+            context.startActivity(intent);
         }
+
+
     }
 
     // 생성자에서 데이터 리스트 객체를 전달받음.
     public UsersAdapter(ArrayList<User> users) {
         this.users = users;
     }
+
 
 }
