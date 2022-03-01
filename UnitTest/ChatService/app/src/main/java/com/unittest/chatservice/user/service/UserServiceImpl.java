@@ -1,5 +1,7 @@
 package com.unittest.chatservice.user.service;
 
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.unittest.chatservice.user.repository.UserRepository;
 
 public class UserServiceImpl implements UserService {
@@ -23,5 +25,10 @@ public class UserServiceImpl implements UserService {
     @Override
     public String getCurrentUserId() {
         return userRepository.findCurrentUserId();
+    }
+
+    @Override
+    public void createUsers(RecyclerView recyclerView) {
+        userRepository.createUserList(recyclerView);
     }
 }

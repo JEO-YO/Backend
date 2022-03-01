@@ -19,10 +19,11 @@ import java.util.List;
 
 public class ChatAdapter extends RecyclerView.Adapter<ChatViewHolder> {
 
-    private static final int MSG_TYPE_LEFT = 0;
-    private static final int MSG_TYPE_RIGHT = 1;
     private final UserRepository userRepository = new FirebaseUserRepository();
     private final UserService userService = new UserServiceImpl(userRepository);
+
+    private static final int MSG_TYPE_LEFT = 0;
+    private static final int MSG_TYPE_RIGHT = 1;
     private final Context mContext;
     private final List<ChatData> mChat;
 

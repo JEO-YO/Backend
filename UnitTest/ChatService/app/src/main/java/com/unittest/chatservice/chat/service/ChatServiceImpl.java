@@ -22,4 +22,14 @@ public class ChatServiceImpl implements ChatService {
     public void read(String myId, String userId, RecyclerView messageView) {
         chatRepository.readChat(myId, userId, messageView);
     }
+
+    @Override
+    public void create(RecyclerView recyclerView) {
+        chatRepository.createChat(recyclerView);
+    }
+
+    @Override
+    public void start(String email) {
+        chatRepository.startChat(email);
+    }
 }

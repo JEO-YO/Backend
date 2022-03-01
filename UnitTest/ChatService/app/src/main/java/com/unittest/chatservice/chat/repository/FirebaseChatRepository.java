@@ -1,6 +1,10 @@
 package com.unittest.chatservice.chat.repository;
 
 import static com.unittest.chatservice.chat.dto.ChatData.CHAT_DATA_TABLE;
+import static com.unittest.chatservice.user.model.User.EMAIL_TABLE;
+import static com.unittest.chatservice.user.model.User.USER_TABLE;
+
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -11,13 +15,23 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.unittest.chatservice.chat.dto.ChatData;
+import com.unittest.chatservice.chat.util.ChatRoomFactory;
 import com.unittest.chatservice.ui.chatroom.ChatAdapter;
 import com.unittest.chatservice.ui.chatroom.ChatRoomActivity;
+import com.unittest.chatservice.ui.userlist.UserListAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class FirebaseChatRepository implements ChatRepository {
+
+    private final ChatRoomFactory chatRoomFactory = new ChatRoomFactory();
+    private final ChatRoomActivity chatRoomActivity = new ChatRoomActivity();
+
+    private static final String TAG = "JEOYO";
+    private static final String GET_DATA_ERROR_MESSAGE = "Error getting data";
+    private static final int MINIMUM_SIZE = 0;
 
     @Override
     public void saveChat(ChatData chatData) {
@@ -27,7 +41,8 @@ public class FirebaseChatRepository implements ChatRepository {
 
     @Override
     public void readChat(String myId, String userId, RecyclerView messageView) {
-        getChatData().addValueEventListener(new ValueEventListener() {
+        final DatabaseReference reference = FirebaseDatabase.getInstance().getReference(CHAT_DATA_TABLE);
+        reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 setMessageView(snapshot, messageView, myId, userId);
@@ -39,8 +54,52 @@ public class FirebaseChatRepository implements ChatRepository {
         });
     }
 
-    private DatabaseReference getChatData() {
-        return FirebaseDatabase.getInstance().getReference(CHAT_DATA_TABLE);
+    @Override
+    public void createChat(RecyclerView recyclerView) {
+        final DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
+        reference.get().addOnCompleteListener(task -> {
+            if (!task.isSuccessful()) {
+                Log.e(TAG, GET_DATA_ERROR_MESSAGE, task.getException());
+                return;
+            }
+            final List<String> usersEmail = chatRoomFactory.showChatRoomLatest(task);
+            setChatRoomListAdapter(recyclerView, usersEmail);
+        });
+    }
+
+    @Override
+    public void startChat(String email) {
+        final DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference().child(USER_TABLE);
+        mDatabase.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                    chat(dataSnapshot, email);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+            }
+        });
+    }
+
+    private void chat(DataSnapshot dataSnapshot, String email) {
+        if (Objects.requireNonNull(dataSnapshot.child(EMAIL_TABLE).getValue()).toString().equals(email)) {
+            final String userId = dataSnapshot.getKey();
+            assert userId != null;
+            chatRoomActivity.clickSendButton(userId);
+            final DatabaseReference chatUsers = FirebaseDatabase.getInstance().getReference(CHAT_DATA_TABLE).child(userId);
+            chatRoomActivity.messageEventListener(userId, chatUsers);
+        }
+    }
+
+    private void setChatRoomListAdapter(RecyclerView recyclerView, List<String> saveUsersEmail) {
+        final UserListAdapter adapter = new UserListAdapter();
+        for (int i = MINIMUM_SIZE; i < saveUsersEmail.size(); i++) {
+            adapter.setArrayData(saveUsersEmail.get(i));
+        }
+        recyclerView.setAdapter(adapter);
     }
 
     private void setMessageView(@NonNull DataSnapshot snapshot, RecyclerView messageView, String myId, String userId) {
