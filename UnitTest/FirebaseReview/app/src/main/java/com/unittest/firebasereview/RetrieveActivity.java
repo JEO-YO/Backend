@@ -45,7 +45,7 @@ public class RetrieveActivity extends AppCompatActivity {
 
     private void retrieveData() {
         DatabaseReference ref1 = FirebaseDatabase.getInstance().getReference().child("Reviews").child("unknown");
-        ;
+
 
         ref1.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
