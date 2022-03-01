@@ -19,4 +19,9 @@ public class UserServiceImpl implements UserService {
     public void auth(String email, String password) {
         userRepository.signIn(email, password);
     }
+
+    @Override
+    public String getCurrentUserId() {
+        return userRepository.findCurrentUserId();
+    }
 }

@@ -52,9 +52,7 @@ public class ChatRoomListActivity extends AppCompatActivity {
 
     private void moveUserList() {
         final Button buttonToUserList = findViewById(R.id.userListButton);
-        buttonToUserList.setOnClickListener(view -> {
-            startActivity(new Intent(this, UserListActivity.class));
-        });
+        buttonToUserList.setOnClickListener(view -> startActivity(new Intent(this, UserListActivity.class)));
     }
 
     private void refresh() {
@@ -97,9 +95,6 @@ public class ChatRoomListActivity extends AppCompatActivity {
         for (String value : chatsValue) {
             final List<String> splitForChatValues = Arrays.asList(value.split(REGEX_FOR_CHAT_VALUES));
             saveUsersId(saveUsersEmail, splitForChatValues, task);
-        }
-        for (String id : saveUsersEmail) {
-            System.out.println("id = " + id);
         }
         return saveUsersEmail;
     }

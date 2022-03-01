@@ -41,6 +41,11 @@ public class FirebaseUserRepository implements UserRepository {
                 });
     }
 
+    @Override
+    public String findCurrentUserId() {
+        return Objects.requireNonNull(mAuth.getCurrentUser()).getUid();
+    }
+
     private void save(String id, String email, String password) {
         final User user = new User(id, email, password);
         final DatabaseReference reference = FirebaseDatabase.getInstance().getReference();

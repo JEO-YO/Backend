@@ -8,10 +8,12 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.unittest.chatservice.R;
 import com.unittest.chatservice.chat.dto.ChatData;
+import com.unittest.chatservice.user.repository.FirebaseUserRepository;
+import com.unittest.chatservice.user.repository.UserRepository;
+import com.unittest.chatservice.user.service.UserService;
+import com.unittest.chatservice.user.service.UserServiceImpl;
 
 import java.util.List;
 
@@ -19,6 +21,8 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatViewHolder> {
 
     private static final int MSG_TYPE_LEFT = 0;
     private static final int MSG_TYPE_RIGHT = 1;
+    private final UserRepository userRepository = new FirebaseUserRepository();
+    private final UserService userService = new UserServiceImpl(userRepository);
     private final Context mContext;
     private final List<ChatData> mChat;
 
@@ -51,9 +55,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatViewHolder> {
 
     @Override
     public int getItemViewType(int position) {
-        final FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
-        assert currentUser != null;
-        if (mChat.get(position).getSender().equals(currentUser.getUid())) {
+        if (mChat.get(position).getSender().equals(userService.getCurrentUserId())) {
             return MSG_TYPE_RIGHT;
         }
         return MSG_TYPE_LEFT;
