@@ -33,7 +33,6 @@ public class RetrieveActivity extends AppCompatActivity {
     private TextView textView_key, textView_writer, textView_classify, textView_category, textView_period, textView_frequency, textView_memberCnt,
             textView_memberCdt, textView_title, textView_description;
     private Button button_retrieve;
-    private ArrayList<Post> posts;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -54,19 +53,18 @@ public class RetrieveActivity extends AppCompatActivity {
 
     private void retrieveData() {
         DatabaseReference ref1 = FirebaseDatabase.getInstance().getReference().child("Posts");
-        ;
 
         ref1.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
-                posts = new ArrayList<Post>();
+                ArrayList<Post> posts = new ArrayList<Post>();
                 // Result will be holded Here
                 for (DataSnapshot dsp : dataSnapshot.getChildren()) {
                     posts.add(dsp.getValue(Post.class)); //add result into array list
                 }
                 Toast.makeText(RetrieveActivity.this, String.valueOf(posts.size()), Toast.LENGTH_SHORT).show();
-                setTextView();
+                setTextView(posts);
 
             }
 
@@ -77,26 +75,27 @@ public class RetrieveActivity extends AppCompatActivity {
 
         });
     }
-    private void retrieveThumbnail(){
+
+    private void retrieveThumbnail() {
         FirebaseStorage storage = FirebaseStorage.getInstance();
         // Create a storage reference from our app
         StorageReference storageRef = storage.getReference();
 
-// Create a reference with an initial file path and name
-        StorageReference pathReference = storageRef.child("posts/"+textView_key.getText());
+        // Create a reference with an initial file path and name
+        StorageReference pathReference = storageRef.child("posts/" + textView_key.getText());
 
         pathReference.getDownloadUrl().
                 addOnSuccessListener(new OnSuccessListener<Uri>() {
-            @Override
-            public void onSuccess(Uri uri) {
-                // Got the download URL for 'users/me/profile.png'
-                Glide
-                        .with(RetrieveActivity.this)
-                        .load(uri) // the uri you got from Firebase
-                        .into(imageView_thumbnail); //Your imageView variable
+                    @Override
+                    public void onSuccess(Uri uri) {
+                        // Got the download URL for 'users/me/profile.png'
+                        Glide
+                                .with(RetrieveActivity.this)
+                                .load(uri) // the uri you got from Firebase
+                                .into(imageView_thumbnail); //Your imageView variable
 //                imageView_thumbnail.setImageURI(uri);
-            }
-        }).addOnFailureListener(new OnFailureListener() {
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception exception) {
                 // Handle any errors
@@ -104,8 +103,8 @@ public class RetrieveActivity extends AppCompatActivity {
         });
     }
 
-    private void setTextView(){
-        Post post = posts.get(posts.size()-1);
+    private void setTextView(ArrayList<Post> posts) {
+        Post post = posts.get(posts.size() - 1);
 
         textView_key.setText(post.getKey());
         textView_writer.setText(post.getWriter());
