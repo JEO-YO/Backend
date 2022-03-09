@@ -28,8 +28,4 @@ public class ChatServiceImpl implements ChatService {
         chatRepository.createChat(recyclerView);
     }
 
-    @Override
-    public void start(String email) {
-        chatRepository.startChat(email);
-    }
 }

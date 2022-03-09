@@ -9,6 +9,4 @@ public interface ChatService {
     void read(String myId, String userId, RecyclerView messageView);
 
     void create(RecyclerView recyclerView);
-
-    void start(String email);
 }

@@ -1,8 +1,6 @@
 package com.unittest.chatservice.chat.repository;
 
 import static com.unittest.chatservice.chat.dto.ChatData.CHAT_DATA_TABLE;
-import static com.unittest.chatservice.user.model.User.EMAIL_TABLE;
-import static com.unittest.chatservice.user.model.User.USER_TABLE;
 
 import android.util.Log;
 
@@ -22,12 +20,10 @@ import com.unittest.chatservice.ui.userlist.UserListAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 public class FirebaseChatRepository implements ChatRepository {
 
     private final ChatRoomFactory chatRoomFactory = new ChatRoomFactory();
-    private final ChatRoomActivity chatRoomActivity = new ChatRoomActivity();
 
     private static final String TAG = "JEOYO";
     private static final String GET_DATA_ERROR_MESSAGE = "Error getting data";
@@ -65,33 +61,6 @@ public class FirebaseChatRepository implements ChatRepository {
             final List<String> usersEmail = chatRoomFactory.showChatRoomLatest(task);
             setChatRoomListAdapter(recyclerView, usersEmail);
         });
-    }
-
-    @Override
-    public void startChat(String email) {
-        final DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference().child(USER_TABLE);
-        mDatabase.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
-                    chat(dataSnapshot, email);
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-            }
-        });
-    }
-
-    private void chat(DataSnapshot dataSnapshot, String email) {
-        if (Objects.requireNonNull(dataSnapshot.child(EMAIL_TABLE).getValue()).toString().equals(email)) {
-            final String userId = dataSnapshot.getKey();
-            assert userId != null;
-            chatRoomActivity.clickSendButton(userId);
-            final DatabaseReference chatUsers = FirebaseDatabase.getInstance().getReference(CHAT_DATA_TABLE).child(userId);
-            chatRoomActivity.messageEventListener(userId, chatUsers);
-        }
     }
 
     private void setChatRoomListAdapter(RecyclerView recyclerView, List<String> saveUsersEmail) {

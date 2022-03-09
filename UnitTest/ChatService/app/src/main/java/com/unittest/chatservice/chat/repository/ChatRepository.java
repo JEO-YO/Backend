@@ -12,5 +12,4 @@ public interface ChatRepository {
 
     void createChat(RecyclerView recyclerView);
 
-    void startChat(String email);
 }
