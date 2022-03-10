@@ -24,7 +24,7 @@ public class ChangePwdActivity extends AppCompatActivity {
     private Button change_btn, verify_btn;
     private EditText newPwdEditText, pwdEditText;
 
-    private FirebaseAuth mAuth;
+//    private FirebaseAuth mAuth;
 
     private final static String TAG = "ChangePwdActivity";
     @Override
@@ -32,7 +32,7 @@ public class ChangePwdActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_change_pwd);
 
-        mAuth = FirebaseAuth.getInstance();
+        FirebaseAuth mAuth = FirebaseAuth.getInstance();
 
         change_btn = findViewById(R.id.change_btn);
         newPwdEditText = findViewById(R.id.editTextNewPassword);

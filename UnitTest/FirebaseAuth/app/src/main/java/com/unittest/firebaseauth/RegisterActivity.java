@@ -22,7 +22,6 @@ public class RegisterActivity  extends AppCompatActivity {
 
     private Button submit_btn;
     private EditText email, password;
-    private FirebaseAuth mAuth;
     private String TAG = "RegisterActivity";
 
     @Override
@@ -30,19 +29,19 @@ public class RegisterActivity  extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activitiy_register);
 
-        mAuth = FirebaseAuth.getInstance();
+        FirebaseAuth mAuth = FirebaseAuth.getInstance();
 
         setId();
 
         submit_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                register();
+                register(mAuth);
             }
         });
     }
 
-    private void register(){
+    private void register(FirebaseAuth mAuth){
         mAuth.createUserWithEmailAndPassword(email.getText().toString(), password.getText().toString())
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
