@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
@@ -26,6 +27,7 @@ import com.unittest.chatservice.chat.repository.ChatRepository;
 import com.unittest.chatservice.chat.repository.FirebaseChatRepository;
 import com.unittest.chatservice.chat.service.ChatService;
 import com.unittest.chatservice.chat.service.ChatServiceImpl;
+import com.unittest.chatservice.ui.chatroomlist.ChatRoomListActivity;
 import com.unittest.chatservice.user.repository.FirebaseUserRepository;
 import com.unittest.chatservice.user.repository.UserRepository;
 import com.unittest.chatservice.user.service.UserService;
@@ -57,7 +59,7 @@ public class ChatRoomActivity extends AppCompatActivity {
         startChat(email);
     }
 
-    // refactor 할 부분 : 순환참조 이슈 제거하며 service, repo에 옮기는 것 생각해보기
+    // TODO::refactor 할 부분 : 순환참조 이슈 제거하며 service, repo에 옮기는 것 생각해보기
     public void startChat(String email) {
         final DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference().child(USER_TABLE);
         mDatabase.addValueEventListener(new ValueEventListener() {
@@ -74,7 +76,7 @@ public class ChatRoomActivity extends AppCompatActivity {
         });
     }
 
-    // refactor 할 부분 : 순환참조 이슈 제거하며 service, repo에 옮기는 것 생각해보기
+    // TODO::refactor 할 부분 : 순환참조 이슈 제거하며 service, repo에 옮기는 것 생각해보기
     private void chat(DataSnapshot dataSnapshot, String email) {
         if (Objects.requireNonNull(dataSnapshot.child(EMAIL_TABLE).getValue()).toString().equals(email)) {
             final String userId = dataSnapshot.getKey();
@@ -119,5 +121,14 @@ public class ChatRoomActivity extends AppCompatActivity {
         final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getApplicationContext());
         linearLayoutManager.setStackFromEnd(true);
         messageView.setLayoutManager(linearLayoutManager);
+    }
+
+    @Override
+    public void onBackPressed() {
+        finish();
+        overridePendingTransition(0, 0);
+        final Intent intent = new Intent(this, ChatRoomListActivity.class);
+        startActivity(intent);
+        overridePendingTransition(0, 0);
     }
 }

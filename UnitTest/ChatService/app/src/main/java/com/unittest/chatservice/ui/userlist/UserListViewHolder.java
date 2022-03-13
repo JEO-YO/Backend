@@ -1,5 +1,6 @@
 package com.unittest.chatservice.ui.userlist;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.view.View;
@@ -28,6 +29,7 @@ public class UserListViewHolder extends RecyclerView.ViewHolder {
             final Intent intent = new Intent(context, ChatRoomActivity.class);
             intent.putExtra(SEND_DATA_KEY, strText);
             context.startActivity(intent);
+            ((Activity)context).finish();
         });
     }
 }
