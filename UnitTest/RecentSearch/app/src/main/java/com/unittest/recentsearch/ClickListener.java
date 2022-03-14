@@ -6,7 +6,7 @@ import java.util.ArrayList;
 
 public interface ClickListener {
 
-    void onDeleteClicked(View v, int position);
+    void onDeleteClicked(View v, int position, ArrayList<String> histories);
 
 //    boolean onQuoteDeleted(String deleteString);
 

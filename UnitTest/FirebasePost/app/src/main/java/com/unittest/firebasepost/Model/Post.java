@@ -3,6 +3,7 @@ package com.unittest.firebasepost.Model;
 
 public class Post {
     private String key;
+    private String writer;
     private String classify;
     private String category;
     private String period;
@@ -17,8 +18,9 @@ public class Post {
     public Post() {
     }
 
-    public Post(String key, String classify, String category, String period, String frequency, String memberCnt, String memberCondition, String title, String description, String thumbnail) {
+    public Post( String key, String writer,String classify, String category, String period, String frequency, String memberCnt, String memberCondition, String title, String description, String thumbnail) {
         this.key = key;
+        this.writer = writer;
         this.classify = classify;
         this.category = category;
         this.period = period;
@@ -28,6 +30,14 @@ public class Post {
         this.title = title;
         this.description = description;
         this.thumbnail = thumbnail;
+    }
+
+    public String getWriter() {
+        return writer;
+    }
+
+    public void setWriter(String writer) {
+        this.writer = writer;
     }
 
     public String getKey() {
