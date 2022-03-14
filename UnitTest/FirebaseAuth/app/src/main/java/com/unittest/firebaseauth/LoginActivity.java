@@ -24,21 +24,19 @@ public class LoginActivity extends AppCompatActivity {
     private Button exceed_btn, changePwd_btn;
     private EditText email, password;
 
-    private FirebaseAuth mAuth;
-
     private final String TAG = "LoginActivity";
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        mAuth = FirebaseAuth.getInstance();
+        FirebaseAuth mAuth = FirebaseAuth.getInstance();
         setId();
 
         exceed_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                login();
+                login(mAuth);
             }
         });
 
@@ -55,7 +53,7 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
-    private void login(){
+    private void login(FirebaseAuth mAuth){
         mAuth.signInWithEmailAndPassword(email.getText().toString(), password.getText().toString())
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override

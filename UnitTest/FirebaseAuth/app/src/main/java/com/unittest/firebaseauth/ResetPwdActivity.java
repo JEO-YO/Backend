@@ -23,15 +23,12 @@ public class ResetPwdActivity extends AppCompatActivity {
 
     private Button send_btn;
     private EditText email_editText;
-    private FirebaseAuth mAuth;
     private String TAG = "ResetPwdActivity";
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_reset_pwd);
-
-        mAuth = FirebaseAuth.getInstance();
 
         send_btn = findViewById(R.id.send_btn);
         email_editText = findViewById(R.id.editTextTextEmailAddress);

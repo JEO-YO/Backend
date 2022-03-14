@@ -11,7 +11,6 @@ import com.google.firebase.auth.FirebaseAuth;
 
 public class MainActivity extends AppCompatActivity {
 
-    private FirebaseAuth mAuth;
     private Button register_btn, login_btn, send_btn;
 
     @Override
@@ -24,7 +23,6 @@ public class MainActivity extends AppCompatActivity {
         send_btn = findViewById(R.id.send_btn);
 
         setOnClick();
-        mAuth = FirebaseAuth.getInstance();
         FirebaseAuth.getInstance().signOut();
     }
 

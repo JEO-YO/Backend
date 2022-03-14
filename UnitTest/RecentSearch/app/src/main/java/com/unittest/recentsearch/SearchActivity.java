@@ -47,7 +47,7 @@ public class SearchActivity extends AppCompatActivity implements ClickListener {
     private RecyclerView recyclerView_history;
 
     DatabaseReference ref;
-    SearchAdapter searchAdapter;
+
 //    ArrayList<String> exampleArray;
 
     private FirebaseAuth mAuth;
@@ -64,7 +64,7 @@ public class SearchActivity extends AppCompatActivity implements ClickListener {
         recyclerView_history = findViewById(R.id.recyclerView_history);
         recyclerView_history.setLayoutManager(new LinearLayoutManager(this));
 
-        ref = FirebaseDatabase.getInstance().getReference().child("Searches").child(mAuth.getCurrentUser().getUid());
+//        ref = FirebaseDatabase.getInstance().getReference().child("Searches").child(mAuth.getCurrentUser().getUid());
 
 //        getHistory();
         setAdapter(readList());
@@ -75,7 +75,19 @@ public class SearchActivity extends AppCompatActivity implements ClickListener {
 //
 //                upload();
                 ArrayList<String> searches = readList();
-                searches.add(editText_search.getText().toString());
+                if (searches.size() < 10){
+                    searches.add(editText_search.getText().toString());
+                }
+                else{
+                    ArrayList<String> temp = new ArrayList<>();
+
+                    for (int i = 1 ; i < searches.size(); i++){
+                        temp.add(searches.get(i));
+                    }
+                    temp.add(editText_search.getText().toString());
+                    searches = temp;
+//                    searches.add(editText_search.getText().toString());
+                }
                 saveList(searches);
                 editText_search.setText("");
                 setAdapter(searches);
@@ -172,7 +184,7 @@ public class SearchActivity extends AppCompatActivity implements ClickListener {
 //    }
 
     private void setAdapter(ArrayList<String> histories) {
-        searchAdapter = new SearchAdapter(histories, this);
+        SearchAdapter searchAdapter = new SearchAdapter(histories, this);
         recyclerView_history.setAdapter(searchAdapter);
     }
 
